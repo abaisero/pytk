@@ -14,7 +14,6 @@ def cache(f):
     @wraps(f)
     def wrapper(*args):
         if args not in saved:
-            print 'CACHING:', f, args
             saved[args] = f(*args)
         return saved[args]
     return wrapper
@@ -25,28 +24,9 @@ class lazy(property):
             return self
         if self.fget is None:
             raise AttributeError("unreadable attribute")
-        # return self.fget(obj)
-        if getattr(self, '__lazy', None) is None:
-            self.__lazy = self.fget(obj)
-            print 'computing'
-        print 'computed'
-        return self.__lazy
-
-# def lazy(f):
-#     """Decorator: computes lazy properties.  The decorated function is only
-#     called once.  Use this if the property needs to be computed at runtime and
-#     is never supposed to change.
-#     """
-#     fname = f.__name__
-#     pname = '_lazy_{}'.format(fname)
-
-#     @wraps(f)
-#     def wrapper(self):
-#         if getattr(self, pname, None) is None:
-#             setattr(self, pname, f(self))
-#         return getattr(self, pname)
-
-#     return wrapper
+        if getattr(self, 'beentheredonethat', None) is None:
+            self.beentheredonethat = self.fget(obj)
+        return self.beentheredonethat
 
 def static(**kwargs):
     """ static function variables """

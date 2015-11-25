@@ -27,3 +27,4 @@ class GracefulHandler(object):
         signal.signal(self.sig, self.original_handler)
         self.released = True
         return True
+

@@ -1,0 +1,4 @@
+build/
+dist/
+pytk.egg*
+tests/
