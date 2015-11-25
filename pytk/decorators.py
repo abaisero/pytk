@@ -18,15 +18,31 @@ def cache(f):
         return saved[args]
     return wrapper
 
-class lazy(property):
-    def __get__(self, obj, objtype=None):
-        if obj is None:
-            return self
-        if self.fget is None:
-            raise AttributeError("unreadable attribute")
-        if getattr(self, 'beentheredonethat', None) is None:
-            self.beentheredonethat = self.fget(obj)
-        return self.beentheredonethat
+# class lazy(property):
+#     def __init__(self, fget=None, fset=None, fdel=None, doc=None):
+#         super(lazy, self).__init__(fget, fset, fdel, doc)
+#         self._mangled_property_name = '_lazy_{}_beenthere_donethat'.format(fget.__name__)
+
+#     def __get__(self, obj, objtype=None):
+#         if obj is None:
+#             return self
+#         if self.fget is None:
+#             raise AttributeError("unreadable attribute")
+#         if getattr(obj, self._mangled_property_name, None) is None:
+#             setattr(obj, self._mangled_property_name, self.fget(obj))
+#             print 'precomputing'
+#         print 'computed'
+#         return getattr(obj, self._mangled_property_name)
+
+def lazyprop(fn):
+    attr_name = '__lazyproperty__' + fn.__name__
+
+    @property
+    def lazy_wrapped(self):
+        if not hasattr(self, attr_name):
+            setattr(self, attr_name, fn(self))
+        return getattr(self, attr_name)
+    return lazy_wrapped
 
 def static(**kwargs):
     """ static function variables """
