@@ -37,7 +37,7 @@ def static(**kwargs):
         return f
     return decorate
 
-class Every(object):
+class every_nth(object):
     """ run the method only every nth call (first one included) """
     def __init__(self, period):
         self.period = period
@@ -49,5 +49,21 @@ class Every(object):
             if self.n % self.period == 0:
                 f(*args, **kwargs)
             self.n += 1
+        return wrapper
+
+from timeit import default_timer as timer
+
+class every(object):
+    def __init__(self, s, m=0, h=0):
+        self.s = s + 60*m + 3600*h
+        self.last = None
+
+    def __call__(self, f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            now = timer()
+            if self.last is None or self.last + self.s <= now:
+                self.last = now
+                f(*args, **kwargs)
         return wrapper
 
