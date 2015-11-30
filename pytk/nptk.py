@@ -5,10 +5,6 @@ def split_as(a, slices):
     cumslices = np.insert(slices.cumsum(), 0, 0)
     return [ a[sf:st] for sf, st in pairwise(cumslices) ]
 
-def make_prob(a):
-    s = a.sum()
-    return a/s, s
-
 def do_along(f, M, axis):
     M2 = np.swapaxes(M, 0, axis)
     ndim = M2.shape[0]
@@ -223,4 +219,84 @@ def _multi_dot(arrays, order, i, j):
                       _multi_dot(arrays, order, order[i, j] + 1, j))
 
 
+
+def block(tup_tup):
+    """
+    Create block arrays similar to Matlab's "square bracket stacking":
+
+            [A A; B B]
+
+    You can create a block array with the same notation you use for
+    `np.array`.
+
+    Note: This function is hopefully going to be part of numpy 1.10.0
+
+    Parameters
+    ----------
+    tup_tup : sequence of sequence of ndarrays
+        1-D arrays are treated as row vectors.
+
+    Returns
+    -------
+    stacked : ndarray
+        The 2-D array formed by stacking the given arrays.
+
+    See Also
+    --------
+    hstack : Stack arrays in sequence horizontally (column wise).
+    vstack : Stack arrays in sequence vertically (row wise).
+    dstack : Stack arrays in sequence depth wise (along third dimension).
+    concatenate : Join a sequence of arrays together.
+    vsplit : Split array into a list of multiple sub-arrays vertically.
+
+    Examples
+    --------
+    Stacking in a row:
+    >>> A = np.array([[1, 2, 3]])
+    >>> B = np.array([[2, 3, 4]])
+    >>> block([A, B])
+    array([[1, 2, 3, 2, 3, 4]])
+
+    >>> A = np.array([[1, 1], [1, 1]])
+    >>> B = 2 * A
+    >>> block([A, B])
+    array([[1, 1, 2, 2],
+           [1, 1, 2, 2]])
+
+    >>> # the tuple notation also works
+    >>> block((A, B))
+    array([[1, 1, 2, 2],
+           [1, 1, 2, 2]])
+
+    >>> # block matrix with arbitrary shaped elements
+    >>> One = np.array([[1, 1, 1]])
+    >>> Two = np.array([[2, 2, 2]])
+    >>> Three = np.array([[3, 3, 3, 3, 3, 3]])
+    >>> four = np.array([4, 4, 4, 4, 4, 4])
+    >>> five = np.array([5])
+    >>> six = np.array([6, 6, 6, 6, 6])
+    >>> Zeros = np.zeros((2, 6), dtype=int)
+    >>> block([[One, Two],
+    ...        [Three],
+    ...        [four],
+    ...        [five, six],
+    ...        [Zeros]])
+    array([[1, 1, 1, 2, 2, 2],
+           [3, 3, 3, 3, 3, 3],
+           [4, 4, 4, 4, 4, 4],
+           [5, 6, 6, 6, 6, 6],
+           [0, 0, 0, 0, 0, 0],
+           [0, 0, 0, 0, 0, 0]])
+
+    >>> # 1-D vectors are treated as row arrays
+    >>> a = np.array([1, 1])
+    >>> b = np.array([2, 2])
+    >>> block([a, b])
+    array([[1, 1, 2, 2]])
+    """
+    if isinstance(tup_tup[0], list) or isinstance(tup_tup[0], tuple):
+        result = np.vstack([np.hstack(row) for row in tup_tup])
+    else:
+        result = np.hstack(tup_tup)
+    return np.atleast_2d(result)
 
