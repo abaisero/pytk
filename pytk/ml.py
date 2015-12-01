@@ -1,7 +1,11 @@
 from __future__ import division
 
-def as_dist(p, minp=None):
-    if (p<0).any():
+import numpy as np
+
+def as_dist(p, minp=None, tol=1e-10):
+    p[(-tol<p)&(p<tol)] = 0
+    if p.min() < 0 < p.max():
+        print p.min(), p.max()
         raise ValueError('Input distribution may not contain negative values.')
     p = p/p.sum()
     if minp is not None:
