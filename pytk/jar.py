@@ -3,11 +3,13 @@ import dill
 
 from .decorators import cache
 
+
 @cache
 def unpickle(fpath):
     """Unpickle path (but only if it's not done yet)."""
     with open(fpath, 'rb') as f:
         return pickle.load(f)
+
 
 @cache
 def undill(fpath):
@@ -15,13 +17,15 @@ def undill(fpath):
     with open(fpath, 'rb') as f:
         return dill.load(f)
 
+
 class Jar(object):
+
     def __init__(self):
         self.labels = []
 
     @property
     def label(self):
-        return '.'.join( ['Jar'] + self.labels + ['dill'] )
+        return '.'.join(['Jar'] + self.labels + ['dill'])
 
     def clear(self):
         del self.labels[:]
@@ -35,4 +39,3 @@ class Jar(object):
 
     def __str__(self):
         return self.label
-

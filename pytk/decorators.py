@@ -1,5 +1,6 @@
 from functools import wraps
 
+
 def cache(f):
     """Decorator: cache the results of f for the same parameters.
     The decorated function is only called if the parameters differ from
@@ -18,7 +19,9 @@ def cache(f):
         return saved[args]
     return wrapper
 
+
 class lazyprop(property):
+
     def __init__(self, fget, doc=None):
         super(lazyprop, self).__init__(fget=fget, doc=doc)
         self.pname = '__lazy__{}'.format(fget.__name__)
@@ -51,6 +54,7 @@ class lazyprop(property):
     def deleter(self, fdel):
         raise AttributeError('Lazyprop does not allow to set explicit deleter')
 
+
 def static(**kwargs):
     """ static function variables """
     def decorate(f):
@@ -59,8 +63,10 @@ def static(**kwargs):
         return f
     return decorate
 
+
 class every_nth(object):
     """ run the method only every nth call (first one included) """
+
     def __init__(self, period):
         self.period = period
         self.n = 0
@@ -75,9 +81,11 @@ class every_nth(object):
 
 from timeit import default_timer as timer
 
+
 class every(object):
+
     def __init__(self, s, m=0, h=0):
-        self.s = s + 60*m + 3600*h
+        self.s = s + 60 * m + 3600 * h
         self.last = None
 
     def __call__(self, f):
@@ -89,7 +97,9 @@ class every(object):
                 f(*args, **kwargs)
         return wrapper
 
+
 class _sentinel_property(property):
+
     def __init__(self, fget, watch):
         super(_sentinel_property, self).__init__(fget=fget)
         self.watch = watch
@@ -107,10 +117,11 @@ class _sentinel_property(property):
             setattr(obj, self.watchman_cache, self.fget(obj))
         return getattr(obj, self.watchman_cache)
 
+
 class sentinel(object):
+
     def __init__(self, pname):
         self.pname = pname
 
     def __call__(self, f):
         return _sentinel_property(f, self.pname)
-

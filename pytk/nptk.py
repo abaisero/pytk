@@ -1,14 +1,17 @@
 import itertools
 import numpy as np
 
+
 def split_as(a, slices):
     cumslices = np.insert(slices.cumsum(), 0, 0)
-    return [ a[sf:st] for sf, st in pairwise(cumslices) ]
+    return [a[sf:st] for sf, st in pairwise(cumslices)]
+
 
 def do_along(f, M, axis):
     M2 = np.swapaxes(M, 0, axis)
     ndim = M2.shape[0]
-    return np.array([ f(M2[i, ...]) for i in range(ndim) ])
+    return np.array([f(M2[i, ...]) for i in range(ndim)])
+
 
 def pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
@@ -26,12 +29,13 @@ if __name__ == '__main__':
     print slice_as(a, d)
 
 ###############################################################################
+
+
 def _assertRank2(*arrays):
     for a in arrays:
         if len(a.shape) != 2:
             raise LinAlgError('%d-dimensional array given. Array must be '
                               'two-dimensional' % len(a.shape))
-
 
 
 ###############################################################################
@@ -202,7 +206,7 @@ def _multi_dot_matrix_chain_order(arrays, return_costs=False):
             j = i + l
             m[i, j] = np.Inf
             for k in range(i, j):
-                q = m[i, k] + m[k+1, j] + p[i]*p[k+1]*p[j+1]
+                q = m[i, k] + m[k + 1, j] + p[i] * p[k + 1] * p[j + 1]
                 if q < m[i, j]:
                     m[i, j] = q
                     s[i, j] = k  # Note that Cormen uses 1-based index
@@ -219,17 +223,11 @@ def _multi_dot(arrays, order, i, j):
                       _multi_dot(arrays, order, order[i, j] + 1, j))
 
 
-
-def block(tup_tup):
+def stack(tup_tup):
     """
-    Create block arrays similar to Matlab's "square bracket stacking":
+    Stack arrays similar to matlab's "square bracket stacking".
 
             [A A; B B]
-
-    You can create a block array with the same notation you use for
-    `np.array`.
-
-    Note: This function is hopefully going to be part of numpy 1.10.0
 
     Parameters
     ----------
@@ -251,52 +249,59 @@ def block(tup_tup):
 
     Examples
     --------
-    Stacking in a row:
     >>> A = np.array([[1, 2, 3]])
     >>> B = np.array([[2, 3, 4]])
-    >>> block([A, B])
+    >>> stack([A, B])
     array([[1, 2, 3, 2, 3, 4]])
 
-    >>> A = np.array([[1, 1], [1, 1]])
-    >>> B = 2 * A
-    >>> block([A, B])
-    array([[1, 1, 2, 2],
-           [1, 1, 2, 2]])
+    >>> A = np.array([[1, 2, 3]]).T
+    >>> B = np.array([[2, 3, 4]]).T
+    >>> stack([A, B])
+    array([[1, 2],
+           [2, 3],
+           [3, 4]])
 
-    >>> # the tuple notation also works
-    >>> block((A, B))
-    array([[1, 1, 2, 2],
-           [1, 1, 2, 2]])
+    >>> A = np.array([[1, 2, 3]])
+    >>> B = np.array([[2, 3, 4]])
+    >>> stack([[A, A], [B, B]])
+    array([[1, 2, 3, 1, 2, 3],
+           [2, 3, 4, 2, 3, 4]])
 
-    >>> # block matrix with arbitrary shaped elements
-    >>> One = np.array([[1, 1, 1]])
-    >>> Two = np.array([[2, 2, 2]])
-    >>> Three = np.array([[3, 3, 3, 3, 3, 3]])
-    >>> four = np.array([4, 4, 4, 4, 4, 4])
-    >>> five = np.array([5])
-    >>> six = np.array([6, 6, 6, 6, 6])
-    >>> Zeros = np.zeros((2, 6), dtype=int)
-    >>> block([[One, Two],
-    ...        [Three],
-    ...        [four],
-    ...        [five, six],
-    ...        [Zeros]])
-    array([[1, 1, 1, 2, 2, 2],
-           [3, 3, 3, 3, 3, 3],
-           [4, 4, 4, 4, 4, 4],
-           [5, 6, 6, 6, 6, 6],
-           [0, 0, 0, 0, 0, 0],
-           [0, 0, 0, 0, 0, 0]])
+    >>> A = np.array([[1, 2, 3]])
+    >>> B = np.array([[2, 3, 4]])
+    >>> stack([[A], [B]])
+    array([[1, 2, 3],
+           [2, 3, 4]])
 
     >>> # 1-D vectors are treated as row arrays
-    >>> a = np.array([1, 1])
-    >>> b = np.array([2, 2])
-    >>> block([a, b])
-    array([[1, 1, 2, 2]])
+    >>> a = np.array([1, 2, 3])
+    >>> b = np.array([2, 3, 4])
+    >>> stack([a, b])
+    array([[1, 2, 3, 2, 3, 4]])
+
+    >>> # 1-D vectors are treated as row arrays
+    >>> a = np.array([1, 2, 3])
+    >>> b = np.array([2, 3, 4])
+    >>> stack([[a, b], [a, b]])
+    array([[1, 2, 3, 2, 3, 4],
+           [1, 2, 3, 2, 3, 4]])
+
+    >>> # a bit more complex
+    >>> A = np.array([[1, 2, 3]])
+    >>> B = np.array([[2, 3, 4, 5, 6, 7]])
+    >>> c = np.array([8, 3, 4, 5, 6, 7])
+    >>> d1 = np.array([9])
+    >>> d2 = np.array([8, 7, 6, 5, 4])
+    >>> stack([[A, A], [B], [c], [d1, d2]])
+    array([[1, 2, 3, 1, 2, 3],
+           [2, 3, 4, 5, 6, 7],
+           [8, 3, 4, 5, 6, 7],
+           [9, 8, 7, 6, 5, 4]])
+
+
     """
     if isinstance(tup_tup[0], list) or isinstance(tup_tup[0], tuple):
-        result = np.vstack([np.hstack(row) for row in tup_tup])
+        result = np.vstack([np.hstack([a for a in row]) for row in tup_tup])
     else:
-        result = np.hstack(tup_tup)
+        result = np.hstack([a for a in tup_tup])
     return np.atleast_2d(result)
-
