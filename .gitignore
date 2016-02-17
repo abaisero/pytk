@@ -1,5 +1,4 @@
 build/
 dist/
 pytk.egg*
-tests/
 *.pyc
