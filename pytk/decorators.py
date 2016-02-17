@@ -1,7 +1,7 @@
 from functools import wraps
 
 
-def cache(f):
+def memoize(f):
     """Decorator: cache the results of f for the same parameters.
     The decorated function is only called if the parameters differ from
     previous calls.

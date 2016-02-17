@@ -22,5 +22,5 @@ setup(
     install_requires=['numpy', ],
     packages=['pytk'],
     license='MIT',
-    # test_suite='tests',
+    test_suite='tests',
 )

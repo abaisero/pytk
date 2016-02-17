@@ -1,4 +1,5 @@
-import sys, logging
+import sys
+import logging
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -15,4 +16,3 @@ ch = logging.StreamHandler(stream=sys.stdout)
 ch.setLevel(logging.INFO)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
-

@@ -1,6 +1,6 @@
 import numpy as np
 
-import cPickle as pickle
+import pickle
 
 
 def allUnique(x):
@@ -36,6 +36,7 @@ class PostIt(object):
     array([ 2, 3, 4])
 
     """
+
     def __init__(self):
         self.n = 0
         self.__idx = {}
@@ -54,14 +55,16 @@ class PostIt(object):
         return np.logical_or.reduce([self.mask(k) for k in self.__idx.keys() if k.startswith(tag)])
 
     def filter(self, a, tag=None):
-        print a.shape, self.mask(tag).shape
+        # print a.shape, self.mask(tag).shape
         return a[self.mask(tag)]
 
     @classmethod
     def load(cls, fname):
-        with open(fname, 'r') as f:
+        # print fname
+        with open(fname, 'rb') as f:
+            # print f
             return pickle.load(f)
 
     def save(self, fname):
-        with open(fname, 'w') as f:
+        with open(fname, 'wb') as f:
             pickle.dump(self, f)

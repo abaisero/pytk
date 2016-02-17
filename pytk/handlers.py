@@ -1,6 +1,8 @@
 import signal
 
+
 class GracefulHandler(object):
+
     def __init__(self, sig=signal.SIGINT):
         self.sig = sig
 
@@ -27,4 +29,3 @@ class GracefulHandler(object):
         signal.signal(self.sig, self.original_handler)
         self.released = True
         return True
-

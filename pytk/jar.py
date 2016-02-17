@@ -1,5 +1,5 @@
-import cPickle as pickle
-import dill
+import pickle
+# import dill
 
 from .decorators import cache
 
@@ -11,11 +11,14 @@ def unpickle(fpath):
         return pickle.load(f)
 
 
-@cache
-def undill(fpath):
-    """Undill path (but only if it's not done yet)."""
-    with open(fpath, 'rb') as f:
-        return dill.load(f)
+# @cache
+# def undill(fpath):
+#     """Undill path (but only if it's not done yet)."""
+#     with open(fpath, 'rb') as f:
+#         return dill.load(f)
+
+
+from pathlib import Path
 
 
 class Jar(object):
@@ -30,12 +33,16 @@ class Jar(object):
     def clear(self):
         del self.labels[:]
 
-    def seal(self, obj):
-        with open(self.label, 'wb') as f:
-            dill.dump(obj, f)
+    def seal(self, obj, path=None):
+        if path is None:
+            path = Path.cwd()
+        with open(str(path / self.label), 'wb') as f:
+            pickle.dump(obj, f)
 
-    def unseal(self):
-        return undill(self.label)
+    def unseal(self, path=None):
+        if path is None:
+            path = Path.cwd()
+        return unpickle(str(path / self.label))
 
     def __str__(self):
         return self.label

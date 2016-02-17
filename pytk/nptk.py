@@ -24,9 +24,9 @@ if __name__ == '__main__':
     b = np.array([2, 3])
     c = np.array([3, 2])
     d = np.array([2, 1, 2])
-    print slice_as(a, b)
-    print slice_as(a, c)
-    print slice_as(a, d)
+    print(slice_as(a, b))
+    print(slice_as(a, c))
+    print(slice_as(a, d))
 
 ###############################################################################
 
