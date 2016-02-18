@@ -1,13 +1,10 @@
 import importlib
 import re
 
-from pytk.decorators import memoize
-
 
 __import_string_regex = re.compile('(?P<module_name>.+)\.(?P<class_name>[^\.]+)')
 
 
-@memoize
 def load_cls(import_string):
     match = __import_string_regex.match(import_string)
     module_name, class_name = match.group('module_name', 'class_name')
@@ -23,6 +20,6 @@ def load_cls(import_string):
     return cls
 
 
-def load_obj(import_string, **kwargs):
+def load_obj(import_string, *args, **kwargs):
     cls = load_cls(import_string)
-    return cls(**kwargs)
+    return cls(*args, **kwargs)
