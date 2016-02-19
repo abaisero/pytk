@@ -8,21 +8,21 @@ class CustomClass_Generic(pack.Serializable):
         self.contents = kwargs
 
     def __str__(self):
-        """ only for debugging the test """
+        """ Only for debugging the test """
         contents_str = ['{}={}'.format(k, v) for k, v in self.contents.iteritems()]
         return '(CustomClass_Generic ' + ', '.join(contents_str) + ')'
 
     def __eq__(self, other):
-        """ only required for testing """
+        """ Only required for testing """
         return self.contents == other.contents
 
     def _encode(self):
-        """ returns a dictionary with all that is necessary for new object instantiation """
+        """ Returns a dictionary with all that is necessary for new object instantiation """
         return self.contents
 
     @classmethod
     def _decode(cls, data):
-        """ reconstructs object instance from data dictionary """
+        """ Reconstructs object instance from data dictionary """
         return cls(**data)
 
 
@@ -38,12 +38,12 @@ class CustomClass_Special(pack.Serializable):
         return self.i == other.i and self.j == other.j
 
     def _encode(self):
-        """ returns a dictionary with necessary for new object instantiation """
+        """ Returns a dictionary with necessary for new object instantiation """
         return dict(i=self.i, j=self.j)
 
     @classmethod
     def _decode(cls, data):
-        """ reconstructs object instance from data dictionary """
+        """ Reconstructs object instance from data dictionary """
         i, j = data['i'], data['j']
         return cls(i, j)
 
@@ -77,7 +77,7 @@ class PackTest(unittest.TestCase):
         self.assertEqual(original, restored)
 
     def test_mixed_types(self):
-        """ objects can contain other objects """
+        """ Objects can contain other objects """
         original = [CustomClass_Generic(i=1, j=2, k=3), CustomClass_Special(4, 5), [6, 7]]
         restored = self.pack_unpack(original)
         self.assertEqual(original, restored)
