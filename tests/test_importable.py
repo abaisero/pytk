@@ -14,12 +14,12 @@ class Foo(object):
 
 class ImportableTest(unittest.TestCase):
     def test_load_cls(self):
-        """ Classes can be imported dynamically using their import_string """
+        # Classes can be imported dynamically using their import_string
         cls = importable.load_cls('tests.test_importable.Foo')
         self.assertIs(cls, Foo)
 
     def test_load_obj(self):
-        """ Objects can be instantiated dynamically using their import_string """
+        # Objects can be instantiated dynamically using their import_string
         obj1 = importable.load_obj('tests.test_importable.Foo', 0, j=1)
         obj2 = Foo(0, j=1)
         self.assertEqual(obj1, obj2)
