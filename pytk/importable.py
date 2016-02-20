@@ -21,5 +21,4 @@ def load_cls(import_string):
 
 
 def load_obj(import_string, *args, **kwargs):
-    cls = load_cls(import_string)
-    return cls(*args, **kwargs)
+    return load_cls(import_string)(*args, **kwargs)
