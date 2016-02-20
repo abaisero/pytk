@@ -62,3 +62,33 @@ def dump(obj, f):
 def load(f):
     """ loads object from file """
     return unpackb(f.read())
+
+from pathlib import Path
+
+
+class Parcel(object):
+
+    def __init__(self):
+        self.labels = []
+
+    @property
+    def label(self):
+        return '.'.join(['Parcel'] + self.labels + ['pack'])
+
+    def clear(self):
+        del self.labels[:]
+
+    def seal(self, obj, path=None):
+        if path is None:
+            path = Path.cwd()
+        with open(str(path / self.label), 'wb') as f:
+            dump(obj, f)
+
+    def unseal(self, path=None):
+        if path is None:
+            path = Path.cwd()
+        with open(str(path / self.label), 'rb') as f:
+            return load(f)
+
+    def __str__(self):
+        return self.label
