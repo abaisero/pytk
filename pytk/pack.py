@@ -1,6 +1,7 @@
 import msgpack
 import msgpack_numpy as msgpack_np
-msgpack_np.patch()
+# The patch is overwritten anyway
+# msgpack_np.patch()
 
 import pytk.importable as importable
 
