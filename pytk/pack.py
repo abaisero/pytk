@@ -1,4 +1,6 @@
 import msgpack
+import msgpack_numpy as msgpack_np
+msgpack_np.patch()
 
 import pytk.importable as importable
 
@@ -23,7 +25,8 @@ def _import_string(obj):
 def _encode_default(obj):
     if isinstance(obj, Serializable):
         return dict(_code=obj._encode(), _id=id(obj), _import_string=_import_string(obj))
-    return obj
+    return msgpack_np.encode(obj)
+    # return obj
 
 _obj_cache = dict()
 
@@ -39,7 +42,10 @@ def _decode_object_hook(data):
             cls = importable.load_cls(_import_string)
             obj = cls._decode(_code)
             _obj_cache[_id] = obj
-    return data if obj is None else obj
+    if obj is None:
+        obj = msgpack_np.decode(data)
+    # return data if obj is None else obj
+    return obj
 
 
 def packb(obj):

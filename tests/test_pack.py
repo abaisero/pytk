@@ -1,5 +1,6 @@
 import unittest
 
+import numpy as np
 import pytk.pack as pack
 
 
@@ -60,13 +61,35 @@ class PackTest(unittest.TestCase):
         restored = pack_unpack(original)
         self.assertEqual(original, restored)
 
+        original = 1.
+        restored = pack_unpack(original)
+        self.assertEqual(original, restored)
+
         original = [1, 2, 3]
         restored = pack_unpack(original)
         self.assertEqual(original, restored)
 
+        # # TODO
+        # # tuples are by default unpacked as lists
+        # original = (1, 2, 3)
+        # restored = pack_unpack(original)
+        # self.assertEqual(original, restored)
+
         original = dict(a=1, b=2)
         restored = pack_unpack(original)
         self.assertEqual(original, restored)
+
+        # # TODO
+        # # msgpack can't unpack sets
+        # original = set([1, 2, 3])
+        # restored = pack_unpack(original)
+        # self.assertEqual(original, restored)
+
+    def test_ndarray(self):
+        # Numpy arrays can be unpacked
+        original = np.arange(12)
+        restored = pack_unpack(original)
+        np.testing.assert_array_equal(original, restored)
 
     def test_custom_types(self):
         # Serializable objects can be unpacked
