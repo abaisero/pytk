@@ -1,10 +1,11 @@
+from __future__ import division
+
 import numpy as np
 
 
 def as_dist(p, minp=None, tol=1e-3):
     p[(-tol < p) & (p < tol)] = 0
     if p.min() < 0 < p.max():
-        # print(p.min(), p.max())
         raise ValueError('Input distribution may not contain negative values.')
     p = p / p.sum()
     if minp is not None:
@@ -19,20 +20,20 @@ def as_dist(p, minp=None, tol=1e-3):
 
 class Feats(object):
     def __init__(self):
-        self._fnames = {}
+        self._attrs = {}
         self._feats = None
 
-    def _add(self, fname, fnum=None):
+    # def _add(self, fname, fnum=None):
 
-        def getter(self):
-            return
+    #     def getter(self):
+    #         return
 
-        def setter(self, value):
-            self. set something
+    #     def setter(self, value):
+    #         self. set something
 
-        prop = property(getter, setter)
-        setattr(self.__class__, fname, prop)
-        # self._fnames[fname] = None
+    #     prop = property(getter, setter)
+    #     setattr(self.__class__, fname, prop)
+    #     # self._attrs[fname] = None
 
     @property
     def feats(self):
@@ -47,20 +48,20 @@ class Feats(object):
         print 'getattr {}'.format(attr)
         if attr is 'feats':
             return None
-        if fname.startswith('_') or fname not in self._fnames:
-            raise AttributeError('Feats object has no feature {}.'.format(fname))
-        return self._fnames[fname]
+        if attr.startswith('_') or attr not in self._attrs:
+            raise AttributeError('Feats object has no feature {}.'.format(attr))
+        return self._attrs[attr]
 
-    def __setattr__(self, fname, value):
-        print 'setattr {} {}'.format(fname, value)
-        # if hasattr(self, 'feats') and hasattr(self.feats, fname)
-        # if fname == '_feats':
+    def __setattr__(self, attr, value):
+        print 'setattr {} {}'.format(attr, value)
+        # if hasattr(self, 'feats') and hasattr(self.feats, attr)
+        # if attr == '_feats':
         #     raise AttributeError
-        if fname.startswith('_'):
-            self.__dict__[fname] = value
-        elif fname not in self._fnames:
-            raise AttributeError('Feats object has no feature {}.'.format(fname))
-        self._fnames[fname] = value
+        if attr.startswith('_'):
+            self.__dict__[attr] = value
+        elif attr not in self._attrs:
+            raise AttributeError('Feats object has no feature {}.'.format(attr))
+        self._attrs[attr] = value
 
 
 class Test(object):
