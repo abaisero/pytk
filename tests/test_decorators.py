@@ -28,6 +28,10 @@ class Foo(object):
     def f_once_every_period(self):
         self.n += 1
 
+    @decorators.static(a=1, b=2)
+    def f_static(self):
+        return self.f_static.a + self.f_static.b
+
 
 class DecoratorTest(unittest.TestCase):
     def setUp(self):
@@ -100,3 +104,17 @@ class DecoratorTest(unittest.TestCase):
                 self.foo.f_once_every_period()
                 self.assertEqual(self.foo.n, i + 1)
                 self.assertEqual(self.foo.f_once_every_period.n, sleep_hz * i + j + 1)
+
+    def test_static(self):
+        # Static attributes can be assigned to functions
+        @decorators.static(a=1, b=2)
+        def f_static():
+            return f_static.a + f_static.b
+
+        self.assertEqual(f_static.a, 1)
+        self.assertEqual(f_static.b, 2)
+        self.assertEqual(f_static(), 3)
+
+        # self.assertEqual(self.foo.f_static.a, 1)
+        # self.assertEqual(self.foo.f_static.b, 2)
+        # self.assertEqual(self.foo.f_static(), 3)

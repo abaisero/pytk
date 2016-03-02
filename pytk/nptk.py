@@ -1,5 +1,6 @@
-import itertools
 import numpy as np
+
+from pytk.itt import pairwise
 
 
 def split_as(a, slices):
@@ -13,20 +14,14 @@ def do_along(f, M, axis):
     return np.array([f(M2[i, ...]) for i in range(ndim)])
 
 
-def pairwise(iterable):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    a, b = itertools.tee(iterable)
-    next(b, None)
-    return itertools.izip(a, b)
-
-if __name__ == '__main__':
-    a = np.array([1, 2, 3, 4, 5])
-    b = np.array([2, 3])
-    c = np.array([3, 2])
-    d = np.array([2, 1, 2])
-    print(slice_as(a, b))
-    print(slice_as(a, c))
-    print(slice_as(a, d))
+# if __name__ == '__main__':
+#     a = np.array([1, 2, 3, 4, 5])
+#     b = np.array([2, 3])
+#     c = np.array([3, 2])
+#     d = np.array([2, 1, 2])
+#     print(slice_as(a, b))
+#     print(slice_as(a, c))
+#     print(slice_as(a, d))
 
 ###############################################################################
 

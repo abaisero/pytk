@@ -131,11 +131,18 @@ def once_every_period(period):
 # Misc
 ################################################################################
 
-# # TODO I have no idea why or how this came to be
-# def static(**kwargs):
-#     """ static function variables """
-#     def decorate(f):
-#         for k in kwargs:
-#             setattr(f, k, kwargs[k])
-#         return f
-#     return decorate
+
+def static(**kwargs):
+    """ static function variables """
+    def decorate(f):
+        for k in kwargs:
+            setattr(f, k, kwargs[k])
+        return f
+    return decorate
+
+
+def boolnot(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return not f(*args, **kwargs)
+    return wrapper
