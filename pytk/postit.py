@@ -7,6 +7,8 @@ def allUnique(x):
     seen = set()
     return not any(i in seen or seen.add(i) for i in x)
 
+from collections import OrderedDict
+
 
 class PostIt(object):
     """
@@ -39,30 +41,32 @@ class PostIt(object):
 
     def __init__(self):
         self.n = 0
-        self.__idx = {}
+        self.tag2idx = OrderedDict()
+
+    def subtags(self, t=''):
+        return filter(lambda tag: tag.startswith(t), self.tag2idx.keys())
 
     def add(self, tag, n=1):
-        self.__idx[tag] = np.arange(self.n, self.n + n)
+        self.tag2idx[tag] = np.arange(self.n, self.n + n)
         self.n += n
 
-    def mask(self, tag=None):
-        if tag is None:
+    def mask(self, *tags):
+        if not tags:
             return np.ones(self.n, dtype=bool)
-        if tag in self.__idx:
-            mask = np.zeros(self.n, dtype=bool)
-            mask[self.__idx[tag]] = True
-            return mask
-        return np.logical_or.reduce([self.mask(k) for k in self.__idx.keys() if k.startswith(tag)])
+        mask = np.zeros(self.n, dtype=bool)
+        tags = [t for tag in map(self.subtags, tags) for t in tag]
+        for tag in tags:
+            idx = self.tag2idx[tag]
+            mask[idx] = True
+        return mask
 
-    def filter(self, a, tag=None):
-        # print a.shape, self.mask(tag).shape
-        return a[self.mask(tag)]
+    def filter(self, a, *tags):
+        mask = self.mask(*tags)
+        return a[mask]
 
     @classmethod
     def load(cls, fname):
-        # print fname
         with open(fname, 'rb') as f:
-            # print f
             return pickle.load(f)
 
     def save(self, fname):

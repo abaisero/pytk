@@ -45,7 +45,6 @@ def _decode_object_hook(data):
             _obj_cache[_id] = obj
     if obj is None:
         obj = msgpack_np.decode(data)
-    # return data if obj is None else obj
     return obj
 
 

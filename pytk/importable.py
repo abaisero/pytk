@@ -15,7 +15,7 @@ def load_cls(import_string):
     except Exception as e:
         e.args = e.args + (
             'Error while instantiating class \'{}\' from module \'{}\''
-            .format(module_name, class_name),)
+            .format(class_name, module_name),)
         raise
     return cls
 
