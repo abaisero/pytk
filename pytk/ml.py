@@ -186,7 +186,8 @@ class Feats(object):
 
     @property
     def feats_2d(self):
-        return np.atleast_2d(self.feats)
+        if self.feats is not None:
+            return np.atleast_2d(self.feats)
 
     @feats.setter
     def feats(self, value):
@@ -207,6 +208,19 @@ class Feats(object):
         idxs = map(np.flatnonzero, masks)
         value = nptk.stack([self.feats_2d.take(idx, axis=-1) for idx in idxs])
         return value.squeeze() if self.feats.ndim == 1 else value.reshape((self.nobj, -1))
+
+    def mask_obj(self, obji):
+        mask = np.zeros(self.feats_2d.shape, dtype=bool)
+        mask[obji, :] = True
+        return mask.ravel()
+
+    def mask_tags(self, tags):
+        mask = np.zeros(self.feats_2d.shape, dtype=bool)
+        for tag in tags:
+            m = self.postit.mask(tag)
+            idx = np.flatnonzero(m)
+            mask[:, idx] = True
+        return mask.ravel()
 
 from autograd import jacobian, hessian
 

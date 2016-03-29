@@ -143,7 +143,6 @@ class MLTest(unittest.TestCase):
         phi.x.postit.add('geom.pos.x')
         phi.x.postit.add('geom.pos.y')
         phi.x.postit.add('geom.pos.z')
-
         phi.y.postit.add('geom.pos.y')
         phi.y.postit.add('geom.pos.x')
         phi.y.postit.add('geom.pos.z')
