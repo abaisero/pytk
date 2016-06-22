@@ -412,10 +412,7 @@ class Phi(object):
 
     def __setitem__(self, keys, value):
         self.x[keys] = value
-        # print value, self.f_autodim(value)
         self.y[keys] = self.f_autodim(value)
-        # self.x[key][:] = value
-        # self.y[key][:] = self.f_autodim(value)
 
     # TODO feats has changed.. no more 'feats' property, and always 2D
     @property
@@ -452,6 +449,10 @@ class Feats(object):
         self._objects = None
 
     @property
+    def lenobj(self):
+        return len(self._objects)
+
+    @property
     def nobj(self):
         return len(self.objects)
 
@@ -485,6 +486,7 @@ class Feats(object):
             else:
                 self._objects = self.base._objects
                 # self._objects = list(self.base.objects)
+        return tuple(filter(lambda o: o is not None, self._objects))
         return tuple(self._objects)
 
     @objects.setter
@@ -493,14 +495,15 @@ class Feats(object):
             self._objects = list(value)
         else:
             self.objects  # initializing _objects
-            for okey, v in zip(self.okeys, value):
-                self._objects[okey] = v
+            map(self._objects.__setitem__, self.okeys, value)
+            # for okey, v in zip(self.okeys, value):
+            #     self._objects[okey] = v
 
     def alias(self, oldkeys, newkeys):
-        # TODO alias should ONLY have a subset of objects... fuck this might be a problem..
         alias = Feats(self)
-        alias._objects = self._objects[:]
-        alias[oldkeys].objects = newkeys
+        alias.objects = self.nobj * [None]
+        okeys = map(self.objects.index, oldkeys)
+        map(alias._objects.__setitem__, okeys, newkeys)
         return alias
 
     def __getitem__(self, keys):
@@ -510,7 +513,7 @@ class Feats(object):
             if keys == slice(None):
                 okeys = range(self.nobj)
             else:
-                okeys = map(self.objects.index, keys)
+                okeys = map(self._objects.index, keys)
             return Feats(self, okeys=okeys)
         else:
             okeys = np.array(self.okeys).reshape(-1, 1)
