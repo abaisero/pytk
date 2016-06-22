@@ -4,8 +4,9 @@ from pytk.itt import pairwise
 
 
 def split_as(a, slices):
-    cumslices = np.insert(slices.cumsum(), 0, 0)
-    return [a[sf:st] for sf, st in pairwise(cumslices)]
+    # TODO raise exception is slices don't match size of a
+    cumslices = np.insert(np.cumsum(slices), 0, 0)
+    return tuple(a[sf:st] for sf, st in pairwise(cumslices))
 
 
 def do_along(f, M, axis):

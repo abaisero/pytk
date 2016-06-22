@@ -12,3 +12,12 @@ class Hashable(object):
 
     def __eq__(self, other):
         return isinstance(self, type(other)) and self._hashable_key == other._hashable_key
+
+
+def tryconvert(x, t):
+    """returns t(x) if no exception is raised. Otherwise x"""
+    try:
+        return t(x)
+    except:
+        pass
+    return x

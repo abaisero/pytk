@@ -1,0 +1,25 @@
+import ml
+
+feats = ml.Feats()
+feats.postit.add('geom.pos.x')
+feats.postit.add('geom.pos.y')
+feats.postit.add('geom.pos.z')
+
+feats[0] = [1, 2, 3]
+feats[0, 1] = [[1, 2, 3], [2, 3, 4]]
+
+print feats.feats
+print feats[0]['geom.pos']
+print feats[1]['geom.pos.y']
+print feats[0, 1]['geom.pos.y']
+print feats[:]['geom.pos.y']
+print feats[:][:]
+
+print feats.objects
+
+print feats.rename(0, 5, inplace=False).objects
+print feats.objects
+
+print feats.rename(0, 4, inplace=True).objects
+print feats.objects
+

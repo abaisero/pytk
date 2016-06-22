@@ -18,6 +18,20 @@ class Serializable(object):
         """ reconstructs object instance from data dictionary """
         raise NotImplementedError
 
+    @property
+    def _key(self):
+        """ tuple of object keys """
+        raise NotImplementedError
+
+    def __eq__(self, other):
+        return isinstance(self, type(other)) and self._key == other._key
+
+    def __lt__(self, other):
+        return self._key < other._key
+
+    def __hash__(self):
+        return hash(self._key)
+
 
 def _import_string(obj):
     return '{}.{}'.format(obj.__module__, obj.__class__.__name__)

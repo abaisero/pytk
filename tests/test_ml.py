@@ -44,229 +44,773 @@ class MLTest(unittest.TestCase):
         w = np.array([1, 1, 1])
         self.assertRaises(ValueError, ml.as_dist, w, .5)
 
-    def test_feats(self):
-        feats = ml.Feats()
-        feats.postit.add('geom.pos.x')
-        feats.postit.add('geom.pos.y')
-        feats.postit.add('geom.pos.z')
-        feats.feats = [2, 3, 4]
+    # def test_feats(self):
+    #     feats = ml.Feats()
+    #     feats.postit.add('geom.pos.x')
+    #     feats.postit.add('geom.pos.y')
+    #     feats.postit.add('geom.pos.z')
+    #     feats.feats = [2, 3, 4]
 
-        self.assertEqual(feats.nobj, 1)
-        self.assertEqual(feats.nfeats, 3)
+    #     self.assertEqual(feats.nobj, 1)
+    #     self.assertEqual(feats.nfeats, 3)
 
-        f = feats.get(('geom.pos', 'geom.pos.x'))
-        np.testing.assert_array_equal(f, [2, 3, 4, 2])
+    #     f = feats.get(('geom.pos', 'geom.pos.x'))
+    #     np.testing.assert_array_equal(f, [2, 3, 4, 2])
 
-        f = feats.get(('geom.pos.y', 'geom.pos.z', 'geom.pos.x'))
-        np.testing.assert_array_equal(f, [3, 4, 2])
+    #     f = feats.get(('geom.pos.y', 'geom.pos.z', 'geom.pos.x'))
+    #     np.testing.assert_array_equal(f, [3, 4, 2])
 
-        f = feats.get(('geom.pos',))
-        np.testing.assert_array_equal(f, [2, 3, 4])
+    #     f = feats.get(('geom.pos',))
+    #     np.testing.assert_array_equal(f, [2, 3, 4])
 
-        feats2 = ml.Feats()
-        feats2.postit.add('geom.pos.z')
-        feats2.postit.add('geom.pos.x')
-        feats2.feats = feats
+    #     feats2 = ml.Feats()
+    #     feats2.postit.add('geom.pos.z')
+    #     feats2.postit.add('geom.pos.x')
+    #     feats2.feats = feats
 
-        f = feats2.feats
-        np.testing.assert_array_equal(f, [4, 2])
+    #     f = feats2.feats
+    #     np.testing.assert_array_equal(f, [4, 2])
 
-    def test_feats_2(self):
-        feats = ml.Feats()
-        feats.postit.add('geom.pos.x')
-        feats.postit.add('geom.pos.y')
-        feats.postit.add('geom.pos.z')
-        feats.feats = [[2, 3, 4]]
+    # def test_feats_2(self):
+    #     feats = ml.Feats()
+    #     feats.postit.add('geom.pos.x')
+    #     feats.postit.add('geom.pos.y')
+    #     feats.postit.add('geom.pos.z')
+    #     feats.feats = [[2, 3, 4]]
 
-        self.assertEqual(feats.nobj, 1)
-        self.assertEqual(feats.nfeats, 3)
+    #     self.assertEqual(feats.nobj, 1)
+    #     self.assertEqual(feats.nfeats, 3)
 
-        f = feats.get(('geom.pos', 'geom.pos.x'))
-        np.testing.assert_array_equal(f, [[2, 3, 4, 2]])
+    #     f = feats.get(('geom.pos', 'geom.pos.x'))
+    #     np.testing.assert_array_equal(f, [[2, 3, 4, 2]])
 
-        f = feats.get(('geom.pos.y', 'geom.pos.z', 'geom.pos.x'))
-        np.testing.assert_array_equal(f, [[3, 4, 2]])
+    #     f = feats.get(('geom.pos.y', 'geom.pos.z', 'geom.pos.x'))
+    #     np.testing.assert_array_equal(f, [[3, 4, 2]])
 
-        f = feats.get(('geom.pos',))
-        np.testing.assert_array_equal(f, [[2, 3, 4]])
+    #     f = feats.get(('geom.pos',))
+    #     np.testing.assert_array_equal(f, [[2, 3, 4]])
 
-        feats2 = ml.Feats()
-        feats2.postit.add('geom.pos.z')
-        feats2.postit.add('geom.pos.x')
-        feats2.feats = feats
+    #     feats2 = ml.Feats()
+    #     feats2.postit.add('geom.pos.z')
+    #     feats2.postit.add('geom.pos.x')
+    #     feats2.feats = feats
 
-        f = feats2.feats
-        np.testing.assert_array_equal(f, [[4, 2]])
+    #     f = feats2.feats
+    #     np.testing.assert_array_equal(f, [[4, 2]])
 
-    def test_feats_multi(self):
-        feats = ml.Feats()
-        feats.postit.add('geom.pos.x')
-        feats.postit.add('geom.pos.y')
-        feats.postit.add('geom.pos.z')
-        feats.feats = [[0, 1, 2],
-                       [3, 4, 5],
-                       [6, 7, 8]]
+    # def test_feats_multi(self):
+    #     feats = ml.Feats()
+    #     feats.postit.add('geom.pos.x')
+    #     feats.postit.add('geom.pos.y')
+    #     feats.postit.add('geom.pos.z')
+    #     feats.feats = [[0, 1, 2],
+    #                    [3, 4, 5],
+    #                    [6, 7, 8]]
 
-        self.assertEqual(feats.nobj, 3)
-        self.assertEqual(feats.nfeats, 3)
+    #     self.assertEqual(feats.nobj, 3)
+    #     self.assertEqual(feats.nfeats, 3)
 
-        f = feats.get(('geom.pos', 'geom.pos.x'))
-        np.testing.assert_array_equal(f, [[0, 1, 2, 0],
-                                          [3, 4, 5, 3],
-                                          [6, 7, 8, 6]])
+    #     f = feats.get(('geom.pos', 'geom.pos.x'))
+    #     np.testing.assert_array_equal(f, [[0, 1, 2, 0],
+    #                                       [3, 4, 5, 3],
+    #                                       [6, 7, 8, 6]])
 
-        f = feats.get(('geom.pos.y', 'geom.pos.z', 'geom.pos.x'))
-        np.testing.assert_array_equal(f, [[1, 2, 0],
-                                          [4, 5, 3],
-                                          [7, 8, 6]])
+    #     f = feats.get(('geom.pos.y', 'geom.pos.z', 'geom.pos.x'))
+    #     np.testing.assert_array_equal(f, [[1, 2, 0],
+    #                                       [4, 5, 3],
+    #                                       [7, 8, 6]])
 
-        f = feats.get(('geom.pos',))
-        np.testing.assert_array_equal(f, [[0, 1, 2],
-                                          [3, 4, 5],
-                                          [6, 7, 8]])
+    #     f = feats.get(('geom.pos',))
+    #     np.testing.assert_array_equal(f, [[0, 1, 2],
+    #                                       [3, 4, 5],
+    #                                       [6, 7, 8]])
 
-        feats2 = ml.Feats()
-        feats2.postit.add('geom.pos.z')
-        feats2.postit.add('geom.pos.x')
-        feats2.feats = feats
+    #     feats2 = ml.Feats()
+    #     feats2.postit.add('geom.pos.z')
+    #     feats2.postit.add('geom.pos.x')
+    #     feats2.feats = feats
 
-        np.testing.assert_array_equal(feats2.feats, [[2, 0],
-                                                     [5, 3],
-                                                     [8, 6]])
+    #     np.testing.assert_array_equal(feats2.feats, [[2, 0],
+    #                                                  [5, 3],
+    #                                                  [8, 6]])
 
-    def test_phi(self):
-        def fun(x):
-            # return np.array([x[1], x[0], x[2], x[1] - x[0], x.prod()])
-            return np.array([x[1], x[0], x[2], x[1] - x[0], x[0] * x[1] * x[2]])
+    # def test_phi(self):
+    #     def fun(x):
+    #         # return np.array([x[1], x[0], x[2], x[1] - x[0], x.prod()])
+    #         return np.array([x[1], x[0], x[2], x[1] - x[0], x[0] * x[1] * x[2]])
 
-        phi = ml.Phi(fun)
-        phi.x.postit.add('geom.pos.x')
-        phi.x.postit.add('geom.pos.y')
-        phi.x.postit.add('geom.pos.z')
-        phi.y.postit.add('geom.pos.y')
-        phi.y.postit.add('geom.pos.x')
-        phi.y.postit.add('geom.pos.z')
-        phi.y.postit.add('geom.pos.diff.yx')
-        phi.y.postit.add('geom.pos.prod')
+    #     phi = ml.Phi(fun)
+    #     phi.x.postit.add('geom.pos.x')
+    #     phi.x.postit.add('geom.pos.y')
+    #     phi.x.postit.add('geom.pos.z')
+    #     phi.y.postit.add('geom.pos.y')
+    #     phi.y.postit.add('geom.pos.x')
+    #     phi.y.postit.add('geom.pos.z')
+    #     phi.y.postit.add('geom.pos.diff.yx')
+    #     phi.y.postit.add('geom.pos.prod')
 
-        phi.feats = [0, 1, 2]
-        np.testing.assert_array_equal(phi.feats, [1, 0, 2, 1, 0])
-        np.testing.assert_array_equal(phi.jac, [[0, 1, 0],
-                                                [1, 0, 0],
-                                                [0, 0, 1],
-                                                [-1, 1, 0],
-                                                [2, 0, 0]])
-        np.testing.assert_array_equal(phi.hess, [[[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 2, 1],
-                                                  [2, 0, 0],
-                                                  [1, 0, 0]]])
+    #     phi.xfeats = [0, 1, 2]
+    #     np.testing.assert_array_equal(phi.y.feats, [1, 0, 2, 1, 0])
+    #     np.testing.assert_array_equal(phi.J, [[0, 1, 0],
+    #                                           [1, 0, 0],
+    #                                           [0, 0, 1],
+    #                                           [-1, 1, 0],
+    #                                           [2, 0, 0]])
+    #     np.testing.assert_array_equal(phi.H, [[[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 2, 1],
+    #                                            [2, 0, 0],
+    #                                            [1, 0, 0]]])
 
-        phi.feats = [1, -1, -1]
-        np.testing.assert_array_equal(phi.feats, [-1, 1, -1, -2, 1])
-        np.testing.assert_array_equal(phi.jac, [[0, 1, 0],
-                                                [1, 0, 0],
-                                                [0, 0, 1],
-                                                [-1, 1, 0],
-                                                [1, -1, -1]])
-        np.testing.assert_array_equal(phi.hess, [[[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, -1, -1],
-                                                  [-1, 0, 1],
-                                                  [-1, 1, 0]]])
+    #     phi.xfeats = [1, -1, -1]
+    #     np.testing.assert_array_equal(phi.y.feats, [-1, 1, -1, -2, 1])
+    #     np.testing.assert_array_equal(phi.J, [[0, 1, 0],
+    #                                           [1, 0, 0],
+    #                                           [0, 0, 1],
+    #                                           [-1, 1, 0],
+    #                                           [1, -1, -1]])
+    #     np.testing.assert_array_equal(phi.H, [[[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, -1, -1],
+    #                                            [-1, 0, 1],
+    #                                            [-1, 1, 0]]])
 
-        def fun(x):
-            x1 = [a for a in x]
-            x2 = [a * a for a in x]
-            return np.array([a for a in x1 + x2])
+    #     def fun(x):
+    #         x1 = [a for a in x]
+    #         x2 = [a * a for a in x]
+    #         return np.array([a for a in x1 + x2])
 
-        phi = ml.Phi(fun)
-        phi.x.postit.add('geom.pos.x')
-        phi.x.postit.add('geom.pos.y')
-        phi.x.postit.add('geom.pos.z')
+    #     phi = ml.Phi(fun)
+    #     phi.x.postit.add('geom.pos.x')
+    #     phi.x.postit.add('geom.pos.y')
+    #     phi.x.postit.add('geom.pos.z')
 
-        phi.y.postit.add('geom.pos.x')
-        phi.y.postit.add('geom.pos.y')
-        phi.y.postit.add('geom.pos.z')
-        phi.y.postit.add('geom.pos.x2')
-        phi.y.postit.add('geom.pos.y2')
-        phi.y.postit.add('geom.pos.z2')
+    #     phi.y.postit.add('geom.pos.x')
+    #     phi.y.postit.add('geom.pos.y')
+    #     phi.y.postit.add('geom.pos.z')
+    #     phi.y.postit.add('geom.pos.x2')
+    #     phi.y.postit.add('geom.pos.y2')
+    #     phi.y.postit.add('geom.pos.z2')
 
-        phi.feats = [0, 1, 2]
-        np.testing.assert_array_equal(phi.feats, [0, 1, 2, 0, 1, 4])
-        np.testing.assert_array_equal(phi.jac, [[1, 0, 0],
-                                                [0, 1, 0],
-                                                [0, 0, 1],
-                                                [0, 0, 0],
-                                                [0, 2, 0],
-                                                [0, 0, 4]])
-        np.testing.assert_array_equal(phi.hess, [[[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[2, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 2, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 2]]])
+    #     phi.xfeats = [0, 1, 2]
+    #     np.testing.assert_array_equal(phi.y.feats, [0, 1, 2, 0, 1, 4])
+    #     np.testing.assert_array_equal(phi.J, [[1, 0, 0],
+    #                                           [0, 1, 0],
+    #                                           [0, 0, 1],
+    #                                           [0, 0, 0],
+    #                                           [0, 2, 0],
+    #                                           [0, 0, 4]])
+    #     np.testing.assert_array_equal(phi.H, [[[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[2, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 2, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 2]]])
 
-        phi.feats = [-1, 0, 1]
-        np.testing.assert_array_equal(phi.feats, [-1, 0, 1, 1, 0, 1])
-        np.testing.assert_array_equal(phi.jac, [[1, 0, 0],
-                                                [0, 1, 0],
-                                                [0, 0, 1],
-                                                [-2, 0, 0],
-                                                [0, 0, 0],
-                                                [0, 0, 2]])
-        np.testing.assert_array_equal(phi.hess, [[[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[2, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 2, 0],
-                                                  [0, 0, 0]],
-                                                 [[0, 0, 0],
-                                                  [0, 0, 0],
-                                                  [0, 0, 2]]])
+    #     phi.xfeats = [-1, 0, 1]
+    #     np.testing.assert_array_equal(phi.y.feats, [-1, 0, 1, 1, 0, 1])
+    #     np.testing.assert_array_equal(phi.J, [[1, 0, 0],
+    #                                           [0, 1, 0],
+    #                                           [0, 0, 1],
+    #                                           [-2, 0, 0],
+    #                                           [0, 0, 0],
+    #                                           [0, 0, 2]])
+    #     np.testing.assert_array_equal(phi.H, [[[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[2, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 2, 0],
+    #                                            [0, 0, 0]],
+    #                                           [[0, 0, 0],
+    #                                            [0, 0, 0],
+    #                                            [0, 0, 2]]])
 
-        np.testing.assert_array_equal(phi.jac.shape, [6, 3])
-        np.testing.assert_array_equal(phi.jac_shape, [6, 3])
-        np.testing.assert_array_equal(phi.hess.shape, [6, 3, 3])
-        np.testing.assert_array_equal(phi.hess_shape, [6, 3, 3])
+    #     np.testing.assert_array_equal(phi.J.shape, [6, 3])
+    #     np.testing.assert_array_equal(phi.J_shape, [6, 3])
+    #     np.testing.assert_array_equal(phi.H.shape, [6, 3, 3])
+    #     np.testing.assert_array_equal(phi.H_shape, [6, 3, 3])
+
+    # def test_params(self):
+    #     params = ml.Params()
+    #     params.postit.add('x.a.1')
+    #     params.postit.add('x.a.2')
+    #     params.postit.add('x.b')
+    #     params.postit.add('y.1')
+    #     params.postit.add('y.2')
+    #     params.params = np.arange(5)
+
+    #     obj = params.get()
+    #     np.testing.assert_array_equal(obj, [])
+    #     obj = params.get(full=True)
+    #     np.testing.assert_array_equal(obj, [0, 0, 0, 0, 0])
+
+    #     obj = params.get('x.a')
+    #     np.testing.assert_array_equal(obj, [0, 1])
+    #     obj = params.get('x.a', full=True)
+    #     np.testing.assert_array_equal(obj, [0, 1, 0, 0, 0])
+
+    #     obj = params.get('x.a', 'y')
+    #     np.testing.assert_array_equal(obj, [0, 1, 3, 4])
+    #     obj = params.get('x.a', 'y', full=True)
+    #     np.testing.assert_array_equal(obj, [0, 1, 0, 3, 4])
+
+    # def test_feats2(self):
+    #     feats = ml.Feats2()
+    #     feats.postit.add('geom.pos.x')
+    #     feats.postit.add('geom.pos.y')
+    #     feats.postit.add('geom.pos.z')
+
+    #     self.assertEqual(feats.nobj, 0)
+    #     self.assertEqual(feats.nfeats, 3)
+
+    #     # feats is a Feats object
+    #     # feats[(x, y, z)] is a tag-view of the feats, which only includes the objects x, y and z
+    #     # The tag view's __getitem__ behaves differently..
+    #     # feats[:]
+    #     feats[1] = [1, 2, 3]
+
+    #     self.assertEqual(feats.nobj, 1)
+    #     self.assertListEqual(feats.objects, [1])
+
+    #     feats[1, 2] = [[1, 2, 3], [3, 4, 5]]
+
+    #     feats[xxx] should simply resturn a new feats
+
+    #     feats[obj] returns an object view of features..
+    #     feats[obj][tags] returns the features associates with tags
+        
+    #     self.assertEqual(feats.nobj, 2)
+    #     np.testing.assert_array_equal(feats[2], [3, 4, 5])
+
+class Feats_SetupTest(unittest.TestCase):
+    def setUp(self):
+        self.feats = ml.Feats()
+        self.feats.postit.add('a.x')
+        self.feats.postit.add('a.y')
+        self.feats.postit.add('b.z')
+
+    def test_setup(self):
+        # check nobj, nfeats
+        self.assertEqual(self.feats.nobj, 0)
+        self.assertEqual(self.feats.nfeats, 3)
+
+    def test_add_single_1(self):
+        self.feats[0] = [0, 1, 2]
+        self.assertEqual(self.feats.nobj, 1)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[:]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[:]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[:]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[:]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[:]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[:][:], [[0, 1, 2]])
+
+        # TODO this isn't working but it should..
+        # self.feats[0]['a.x'] = -1
+        # print self.feats.farray
+        # np.testing.assert_array_equal(self.feats[0]['a.x'], [[-1]])
+        # np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        # np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        # np.testing.assert_array_equal(self.feats[0]['a'], [[-1, 1]])
+        # np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        # np.testing.assert_array_equal(self.feats[0][:], [[-1, 1, 2]])
+        # np.testing.assert_array_equal(self.feats[:]['a.x'], [[-1]])
+        # np.testing.assert_array_equal(self.feats[:]['a.y'], [[1]])
+        # np.testing.assert_array_equal(self.feats[:]['b.z'], [[2]])
+        # np.testing.assert_array_equal(self.feats[:]['a'], [[-1, 1]])
+        # np.testing.assert_array_equal(self.feats[:]['b'], [[2]])
+        # np.testing.assert_array_equal(self.feats[:][:], [[-1, 1, 2]])
+
+    def test_add_single_2(self):
+        self.feats[0] = [0, 1, 2]
+        self.feats[1] = [3, 4, 5]
+        self.assertEqual(self.feats.nobj, 2)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[1][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0][:], [[3, 4, 5], [0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[:]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[:]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[:]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[:]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[:]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[:][:], [[0, 1, 2], [3, 4, 5]])
+
+    def test_add_multiple_1(self):
+        self.feats[0, 1] = [[0, 1, 2],
+                            [3, 4, 5]]
+        self.assertEqual(self.feats.nobj, 2)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[1][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0][:], [[3, 4, 5], [0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[:]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[:]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[:]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[:]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[:]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[:][:], [[0, 1, 2], [3, 4, 5]])
+
+    def test_add_multiple_2(self):
+        self.feats[0, 1] = [[0, 1, 2],
+                            [3, 4, 5]]
+        self.feats[2, 3] = [[6, 7, 8],
+                            [9, 10, 11]]
+        self.assertEqual(self.feats.nobj, 4)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[1][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0][:], [[3, 4, 5], [0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[2]['a.x'], [[6]])
+        np.testing.assert_array_equal(self.feats[2]['a.y'], [[7]])
+        np.testing.assert_array_equal(self.feats[2]['b.z'], [[8]])
+        np.testing.assert_array_equal(self.feats[2]['a'], [[6, 7]])
+        np.testing.assert_array_equal(self.feats[2]['b'], [[8]])
+        np.testing.assert_array_equal(self.feats[2][:], [[6, 7, 8]])
+        np.testing.assert_array_equal(self.feats[3]['a.x'], [[9]])
+        np.testing.assert_array_equal(self.feats[3]['a.y'], [[10]])
+        np.testing.assert_array_equal(self.feats[3]['b.z'], [[11]])
+        np.testing.assert_array_equal(self.feats[3]['a'], [[9, 10]])
+        np.testing.assert_array_equal(self.feats[3]['b'], [[11]])
+        np.testing.assert_array_equal(self.feats[3][:], [[9, 10, 11]])
+        np.testing.assert_array_equal(self.feats[2, 3]['a.x'], [[6], [9]])
+        np.testing.assert_array_equal(self.feats[2, 3]['a.y'], [[7], [10]])
+        np.testing.assert_array_equal(self.feats[2, 3]['b.z'], [[8], [11]])
+        np.testing.assert_array_equal(self.feats[2, 3]['a'], [[6, 7], [9, 10]])
+        np.testing.assert_array_equal(self.feats[2, 3]['b'], [[8], [11]])
+        np.testing.assert_array_equal(self.feats[2, 3][:], [[6, 7, 8], [9, 10, 11]])
+        np.testing.assert_array_equal(self.feats[:]['a.x'], [[0], [3], [6], [9]])
+        np.testing.assert_array_equal(self.feats[:]['a.y'], [[1], [4], [7], [10]])
+        np.testing.assert_array_equal(self.feats[:]['b.z'], [[2], [5], [8], [11]])
+        np.testing.assert_array_equal(self.feats[:]['a'], [[0, 1], [3, 4], [6, 7], [9, 10]])
+        np.testing.assert_array_equal(self.feats[:]['b'], [[2], [5], [8], [11]])
+        np.testing.assert_array_equal(self.feats[:][:], [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11]])
+
+    def test_mod_single(self):
+        self.feats[0] = [0, 1, 2]
+        self.feats[0] = [3, 4, 5]
+        self.assertEqual(self.feats.nobj, 1)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[0][:], [[3, 4, 5]])
+
+    def test_mod_multiple_1(self):
+        self.feats[0, 1] = [[0, 1, 2],
+                            [3, 4, 5]]
+        self.feats[0, 1] = [[6, 7, 8],
+                            [9, 10, 11]]
+        self.assertEqual(self.feats.nobj, 2)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[6]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[7]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[8]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[6, 7]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[8]])
+        np.testing.assert_array_equal(self.feats[0][:], [[6, 7, 8]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[9]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[10]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[11]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[9, 10]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[11]])
+        np.testing.assert_array_equal(self.feats[1][:], [[9, 10, 11]])
+
+    # TODO mod with different order doesn't work
+    # def test_mod_multiple_2(self):
+    #     self.feats[0, 1] = [[0, 1, 2],
+    #                         [3, 4, 5]]
+    #     self.feats[1, 0] = [[9, 10, 11],
+    #                         [6, 7, 8]]
+    #     self.assertEqual(self.feats.nobj, 2)
+    #     np.testing.assert_array_equal(self.feats[0]['a.x'], [[6]])
+    #     np.testing.assert_array_equal(self.feats[0]['a.y'], [[7]])
+    #     np.testing.assert_array_equal(self.feats[0]['b.z'], [[8]])
+    #     np.testing.assert_array_equal(self.feats[0]['a'], [[6, 7]])
+    #     np.testing.assert_array_equal(self.feats[0]['b'], [[8]])
+    #     np.testing.assert_array_equal(self.feats[0][:], [[6, 7, 8]])
+    #     np.testing.assert_array_equal(self.feats[1]['a.x'], [[9]])
+    #     np.testing.assert_array_equal(self.feats[1]['a.y'], [[10]])
+    #     np.testing.assert_array_equal(self.feats[1]['b.z'], [[11]])
+    #     np.testing.assert_array_equal(self.feats[1]['a'], [[9, 10]])
+    #     np.testing.assert_array_equal(self.feats[1]['b'], [[11]])
+    #     np.testing.assert_array_equal(self.feats[1][:], [[9, 10, 11]])
+
+    def test_add_mod(self):
+        self.feats[0] = [0, 1, 2]
+        self.feats[0, 1] = [[3, 4, 5],
+                            [6, 7, 8]]
+        self.assertEqual(self.feats.nobj, 2)
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[0][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[6]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[7]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[8]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[6, 7]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[8]])
+        np.testing.assert_array_equal(self.feats[1][:], [[6, 7, 8]])
+
+    def test_obj_1(self):
+        self.feats.objects = [0, 1]
+        self.assertEqual(self.feats.nobj, 2)
+
+    def test_obj_2(self):
+        self.feats[0] = [0, 1, 2]
+        self.assertEqual(self.feats.nobj, 1)
+        np.testing.assert_equal(self.feats.objects, [0])
+
+        self.feats[1] = [3, 4, 5]
+        self.assertEqual(self.feats.nobj, 2)
+        np.testing.assert_equal(self.feats.objects, [0, 1])
+
+        self.feats[0, 1].objects = [2, 3]
+        self.assertEqual(self.feats.nobj, 2)
+        np.testing.assert_equal(self.feats.objects, [2, 3])
+
+        # TODO also check the feature values with the new object names
+
+    def test_alias(self):
+        self.feats[0, 1] = [[0, 1, 2],
+                            [3, 4, 5]]
+        alias = self.feats.alias((0, 1), (2, 3))
+        self.assertEqual(self.feats.nobj, 2)
+        self.assertEqual(alias.nobj, 2)
+        np.testing.assert_equal(self.feats.objects, (0, 1))
+        np.testing.assert_equal(alias.objects, (2, 3))
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[1][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0][:], [[3, 4, 5], [0, 1, 2]])
+        np.testing.assert_array_equal(alias[2]['a.x'], [[0]])
+        np.testing.assert_array_equal(alias[2]['a.y'], [[1]])
+        np.testing.assert_array_equal(alias[2]['b.z'], [[2]])
+        np.testing.assert_array_equal(alias[2]['a'], [[0, 1]])
+        np.testing.assert_array_equal(alias[2]['b'], [[2]])
+        np.testing.assert_array_equal(alias[2][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(alias[3]['a.x'], [[3]])
+        np.testing.assert_array_equal(alias[3]['a.y'], [[4]])
+        np.testing.assert_array_equal(alias[3]['b.z'], [[5]])
+        np.testing.assert_array_equal(alias[3]['a'], [[3, 4]])
+        np.testing.assert_array_equal(alias[3]['b'], [[5]])
+        np.testing.assert_array_equal(alias[3][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(alias[2, 3]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(alias[2, 3]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(alias[2, 3]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(alias[2, 3]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(alias[2, 3]['b'], [[2], [5]])
+        np.testing.assert_array_equal(alias[2, 3][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(alias[3, 2]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(alias[3, 2]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(alias[3, 2]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(alias[3, 2]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(alias[3, 2]['b'], [[5], [2]])
+        np.testing.assert_array_equal(alias[3, 2][:], [[3, 4, 5], [0, 1, 2]])
+
+        alias = self.feats.alias((0, 1), (1, 2))
+        self.assertEqual(self.feats.nobj, 2)
+        self.assertEqual(alias.nobj, 2)
+        np.testing.assert_equal(self.feats.objects, (0, 1))
+        np.testing.assert_equal(alias.objects, (1, 2))
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[1][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0][:], [[3, 4, 5], [0, 1, 2]])
+        np.testing.assert_array_equal(alias[1]['a.x'], [[0]])
+        np.testing.assert_array_equal(alias[1]['a.y'], [[1]])
+        np.testing.assert_array_equal(alias[1]['b.z'], [[2]])
+        np.testing.assert_array_equal(alias[1]['a'], [[0, 1]])
+        np.testing.assert_array_equal(alias[1]['b'], [[2]])
+        np.testing.assert_array_equal(alias[1][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(alias[2]['a.x'], [[3]])
+        np.testing.assert_array_equal(alias[2]['a.y'], [[4]])
+        np.testing.assert_array_equal(alias[2]['b.z'], [[5]])
+        np.testing.assert_array_equal(alias[2]['a'], [[3, 4]])
+        np.testing.assert_array_equal(alias[2]['b'], [[5]])
+        np.testing.assert_array_equal(alias[2][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(alias[1, 2]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(alias[1, 2]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(alias[1, 2]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(alias[1, 2]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(alias[1, 2]['b'], [[2], [5]])
+        np.testing.assert_array_equal(alias[1, 2][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(alias[2, 1]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(alias[2, 1]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(alias[2, 1]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(alias[2, 1]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(alias[2, 1]['b'], [[5], [2]])
+        np.testing.assert_array_equal(alias[2, 1][:], [[3, 4, 5], [0, 1, 2]])
+
+        alias = self.feats.alias((1,), (0,))
+        self.assertEqual(self.feats.nobj, 2)
+        self.assertEqual(alias.nobj, 1)
+        np.testing.assert_equal(self.feats.objects, (0, 1))
+        np.testing.assert_equal(alias.objects, (0,))
+        np.testing.assert_array_equal(self.feats[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(self.feats[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(self.feats[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(self.feats[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(self.feats[0]['b'], [[2]])
+        np.testing.assert_array_equal(self.feats[0][:], [[0, 1, 2]])
+        np.testing.assert_array_equal(self.feats[1]['a.x'], [[3]])
+        np.testing.assert_array_equal(self.feats[1]['a.y'], [[4]])
+        np.testing.assert_array_equal(self.feats[1]['b.z'], [[5]])
+        np.testing.assert_array_equal(self.feats[1]['a'], [[3, 4]])
+        np.testing.assert_array_equal(self.feats[1]['b'], [[5]])
+        np.testing.assert_array_equal(self.feats[1][:], [[3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.x'], [[0], [3]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a.y'], [[1], [4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b.z'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1]['a'], [[0, 1], [3, 4]])
+        np.testing.assert_array_equal(self.feats[0, 1]['b'], [[2], [5]])
+        np.testing.assert_array_equal(self.feats[0, 1][:], [[0, 1, 2], [3, 4, 5]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.x'], [[3], [0]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a.y'], [[4], [1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b.z'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0]['a'], [[3, 4], [0, 1]])
+        np.testing.assert_array_equal(self.feats[1, 0]['b'], [[5], [2]])
+        np.testing.assert_array_equal(self.feats[1, 0][:], [[3, 4, 5], [0, 1, 2]])
+        np.testing.assert_array_equal(alias[0]['a.x'], [[0]])
+        np.testing.assert_array_equal(alias[0]['a.y'], [[1]])
+        np.testing.assert_array_equal(alias[0]['b.z'], [[2]])
+        np.testing.assert_array_equal(alias[0]['a'], [[0, 1]])
+        np.testing.assert_array_equal(alias[0]['b'], [[2]])
+        np.testing.assert_array_equal(alias[0][:], [[0, 1, 2]])
+
+        # alias = self.feats.alias((0, 1), (1, 0))
+        # np.testing.assert_equal
+
+# class Feats_Test(unittest.TestCase):
+#     def setUpClass(Self):
+#         feats = ml.Feats()
+#         feats.postit.add('a.x')
+#         feats.postit.add('a.y')
+#         feats.postit.add('b.z')
+
+#         feats[1, 2, 3, 4] = [[0, 1, 2]
+#                              [3, 4, 5]
+#                              [6, 7, 8]
+#                              [9, 10, 11]]
+
+#     def test_feats(self):
+
+#         # check nobj, nfeats
+#         self.assertEqual(feats.nobj, 0)
+#         self.assertEqual(feats.nfeats, 3)
+
+#         # changing both objects
+#         feats[2, 1] = [[0, 1, 2], [0, -1, -2]]
+#         self.assertEqual(feats.nobj, 2)
+#         np.testing.assert_array_equal(feats[1]['a.x'], [[0]])
+#         np.testing.assert_array_equal(feats[1]['a.y'], [[-1]])
+#         np.testing.assert_array_equal(feats[1]['b.z'], [[-2]])
+#         np.testing.assert_array_equal(feats[1]['a'], [[0, -1]])
+#         np.testing.assert_array_equal(feats[1]['b'], [[-2]])
+#         np.testing.assert_array_equal(feats[1][:], [[0, -1, -2]])
+#         np.testing.assert_array_equal(feats[2]['a.x'], [[0]])
+#         np.testing.assert_array_equal(feats[2]['a.y'], [[1]])
+#         np.testing.assert_array_equal(feats[2]['b.z'], [[2]])
+#         np.testing.assert_array_equal(feats[2]['a'], [[0, 1]])
+#         np.testing.assert_array_equal(feats[2]['b'], [[2]])
+#         np.testing.assert_array_equal(feats[2][:], [[0, 1, 2]])
+#         np.testing.assert_array_equal(feats[:]['a.x'], [[0], [0]])
+#         np.testing.assert_array_equal(feats[:]['a.y'], [[-1], [1]])
+#         np.testing.assert_array_equal(feats[:]['b.z'], [[-2], [2]])
+#         np.testing.assert_array_equal(feats[:]['a'], [[0, -1], [0, 1]])
+#         np.testing.assert_array_equal(feats[:]['b'], [[-2], [2]])
+#         np.testing.assert_array_equal(feats[:][:], [[0, -1, -2], [0, 1, 2]])
+
+#         # changing one object and adding another one
+#         # TODO
+#         # TODO reset feats obejct for each test...
+
+#         # renaming two objects
+#         feats[2, 1].objects = [3, 2]
+#         self.assertEqual(feats.nobj, 2)
+#         np.testing.assert_array_equal(feats[3]['a.x'], [[0]])
+#         np.testing.assert_array_equal(feats[3]['a.y'], [[-1]])
+#         np.testing.assert_array_equal(feats[3]['b.z'], [[-2]])
+#         np.testing.assert_array_equal(feats[3]['a'], [[0, -1]])
+#         np.testing.assert_array_equal(feats[3]['b'], [[-2]])
+#         np.testing.assert_array_equal(feats[3][:], [[0, -1, -2]])
+#         np.testing.assert_array_equal(feats[2]['a.x'], [[0]])
+#         np.testing.assert_array_equal(feats[2]['a.y'], [[1]])
+#         np.testing.assert_array_equal(feats[2]['b.z'], [[2]])
+#         np.testing.assert_array_equal(feats[2]['a'], [[0, 1]])
+#         np.testing.assert_array_equal(feats[2]['b'], [[2]])
+#         np.testing.assert_array_equal(feats[2][:], [[0, 1, 2]])
+#         np.testing.assert_array_equal(feats[:]['a.x'], [[0], [0]])
+#         np.testing.assert_array_equal(feats[:]['a.y'], [[-1], [1]])
+#         np.testing.assert_array_equal(feats[:]['b.z'], [[-2], [2]])
+#         np.testing.assert_array_equal(feats[:]['a'], [[0, -1], [0, 1]])
+#         np.testing.assert_array_equal(feats[:]['b'], [[-2], [2]])
+#         np.testing.assert_array_equal(feats[:][:], [[0, -1, -2], [0, 1, 2]])
+
+#         # feats[2, 3] = [[1, 2, 3], [2, 3, 4]]
+#         # self.assertEqual(feats.nobj, 3)
+#         # self.assertEqual(feats.nfeats, 3)
+
+#         # check nobj, nfeats
+
+#         # NB feats.objects = (1, 2, 3) resets feats
+#         # feats.objects[:] just renames (keeps feats)
+
+#         # # check values
+#         # feats[1]
+#         # feats[2]
+#         # feats[1, 2]
+#         # feats[:]
+
+#         # # check values
+#         # feats[:]['geom.pos']
+
+#         # feats[1, 2].objects = (3, 4)

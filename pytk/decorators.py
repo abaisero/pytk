@@ -146,3 +146,10 @@ def boolnot(f):
     def wrapper(*args, **kwargs):
         return not f(*args, **kwargs)
     return wrapper
+
+
+class setprop(property):
+    """ Memoize a property such that it is computed only once """
+
+    def __init__(self, fset, doc=None):
+        super(setprop, self).__init__(fget=None, fset=fset, doc=doc)

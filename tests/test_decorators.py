@@ -7,6 +7,7 @@ import pytk.decorators as decorators
 class Foo(object):
     def __init__(self):
         self.n = 0
+        self._value = None
 
     @decorators.memoize
     def f_memoized(self, *args, **kwargs):
@@ -31,6 +32,14 @@ class Foo(object):
     @decorators.static(a=1, b=2)
     def f_static(self):
         return self.f_static.a + self.f_static.b
+
+    @property
+    def f_getter(self):
+        return self._value
+
+    @decorators.setprop
+    def f_setter(self, value):
+        self._value = value
 
 
 class DecoratorTest(unittest.TestCase):
@@ -118,3 +127,9 @@ class DecoratorTest(unittest.TestCase):
         # self.assertEqual(self.foo.f_static.a, 1)
         # self.assertEqual(self.foo.f_static.b, 2)
         # self.assertEqual(self.foo.f_static(), 3)
+
+    def test_setter(self):
+        self.assertEqual(self.foo._value, None)
+        self.foo.f_setter = 3
+        self.assertEqual(self.foo._value, 3)
+        self.assertEqual(self.foo.f_getter, 3)
