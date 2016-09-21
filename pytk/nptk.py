@@ -1,9 +1,9 @@
 import numpy as np
 
-from pytk.itt import pairwise
+from more_itertools.recipes import pairwise
 
 
-def split_as(a, slices):
+def split(a, slices):
     # TODO raise exception is slices don't match size of a
     cumslices = np.insert(np.cumsum(slices), 0, 0)
     return tuple(a[sf:st] for sf, st in pairwise(cumslices))

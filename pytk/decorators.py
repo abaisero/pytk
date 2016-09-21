@@ -153,3 +153,10 @@ class setprop(property):
 
     def __init__(self, fset, doc=None):
         super(setprop, self).__init__(fget=None, fset=fset, doc=doc)
+
+
+def monkeypatch(cls):
+    def decorator(func):
+        setattr(cls, func.__name__, func)
+        return func
+    return decorator

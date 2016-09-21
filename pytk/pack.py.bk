@@ -6,7 +6,18 @@ import msgpack_numpy as msgpack_np
 import pytk.importable as importable
 
 
-class Hashable(object):
+class Serializable(object):
+    """ Inherit from this class if you want your custom objects to be serializable """
+
+    def _encode(self):
+        """ returns a dictionary with all that is necessary for new object instantiation """
+        raise NotImplementedError
+
+    @classmethod
+    def _decode(cls, data):
+        """ reconstructs object instance from data dictionary """
+        raise NotImplementedError
+
     @property
     def _key(self):
         """ tuple of object keys """
@@ -15,26 +26,11 @@ class Hashable(object):
     def __eq__(self, other):
         return isinstance(self, type(other)) and self._key == other._key
 
+    def __lt__(self, other):
+        return self._key < other._key
+
     def __hash__(self):
-        return hash(self._key.iteritems())
-
-
-class Serializable(object):
-    """ Inherit from this class if you want your custom objects to be serializable """
-
-    @property
-    def _code(self):
-        """ tuple of object code """
-        raise NotImplementedError
-
-    def _encode(self):
-        """ returns a dictionary with all that is necessary for new object instantiation """
-        return self._code
-
-    @classmethod
-    def _decode(cls, data):
-        """ reconstructs object instance from data dictionary """
-        raise NotImplementedError
+        return hash(self._key)
 
 
 def _import_string(obj):
@@ -79,23 +75,15 @@ def unpackb(stream):
     # _obj_cache = dict()
     return msgpack.unpackb(stream, object_hook=_decode_object_hook)
 
-def fdump(obj, f):
+
+def dump(obj, f):
     """ dumps object into file """
     f.write(packb(obj))
 
-def fload(f):
+
+def load(f):
     """ loads object from file """
     return unpackb(f.read())
-
-def dump(obj, fname):
-    with open(fname, 'w') as f:
-        fdump(obj, f)
-
-def load(fname):
-    with open(fname, 'r') as f:
-        obj = fload(f)
-    return obj
-
 
 from pathlib import Path
 

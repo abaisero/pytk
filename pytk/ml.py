@@ -374,23 +374,36 @@ class Phi(pack.Serializable):
         return '(Phi {} -> {})'.format(self.x.nfeats, self.y.nfeats)
 
 
+# TODO create mapping class......
 class Phi(object):
     def __init__(self, f=None):
         if f is None:
             def f(x):
                 return x
 
-        self.f = f
-        self.j = jacobian(f)
-        self.h = hessian(f)
+        self.f_raw = f
+        self.j_raw = jacobian(f)
+        self.h_raw = hessian(f)
 
         self.x = Feats()
         self.y = Feats()
 
-    def f_autodim(self, X):
-        if X.ndim == 2:
-            return np.array(map(self.f, X))
-        return self.f(X)
+    def f(self, X, autodim=True):
+        """ always returns as 2d ndarray. """
+        if autodim:
+            X_autodim = X.reshape((-1, self.x.nfeats))
+            Y_autodim = np.array(map(self.f_raw, X_autodim))
+            return Y_autodim
+        return self.f_raw(X)
+
+    def j(self, X, autodim=True):
+        """ always returns as 2d ndarray. """
+        if autodim:
+            X_autodim = X.reshape(-1, self.x.nfeats)
+            Y_autodim = np.array(map(self.j_raw, X_autodim))
+            # Y_autodim = Y_autodim.reshape(-1, self.x.nfeats)
+            return Y_autodim
+        return self.j_raw(X)
 
     @property
     def objects(self):
@@ -412,7 +425,7 @@ class Phi(object):
 
     def __setitem__(self, keys, value):
         self.x[keys] = value
-        self.y[keys] = self.f_autodim(value)
+        self.y[keys] = self.f(value)
 
     # TODO feats has changed.. no more 'feats' property, and always 2D
     @property
