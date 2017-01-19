@@ -340,7 +340,7 @@ class Phi(pack.Serializable):
         assert self.x.nobj == self.y.nobj
         return self.x.nobj
 
-    @setprop
+    @setter
     def xfeats(self, value):
         """ Set the domain features (self.x.feats) and update the corresponding range features (self.y.feats)"""
         self.x.feats = value
@@ -388,21 +388,21 @@ class Phi(object):
         self.x = Feats()
         self.y = Feats()
 
-    def f(self, X, autodim=True):
+    def f(self, X, _2d=True):
         """ always returns as 2d ndarray. """
-        if autodim:
-            X_autodim = X.reshape((-1, self.x.nfeats))
-            Y_autodim = np.array(map(self.f_raw, X_autodim))
-            return Y_autodim
+        if _2d:
+            X_2d = X.reshape((-1, self.x.nfeats))
+            Y_2d = np.array(map(self.f_raw, X_2d))
+            return Y_2d
         return self.f_raw(X)
 
-    def j(self, X, autodim=True):
+    def j(self, X, _2d=True):
         """ always returns as 2d ndarray. """
-        if autodim:
-            X_autodim = X.reshape(-1, self.x.nfeats)
-            Y_autodim = np.array(map(self.j_raw, X_autodim))
-            # Y_autodim = Y_autodim.reshape(-1, self.x.nfeats)
-            return Y_autodim
+        if _2d:
+            X_2d = X.reshape(-1, self.x.nfeats)
+            Y_2d = np.array(map(self.j_raw, X_2d))
+            # Y_2d = Y_2d.reshape(-1, self.x.nfeats)
+            return Y_2d
         return self.j_raw(X)
 
     @property

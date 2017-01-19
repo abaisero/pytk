@@ -148,15 +148,20 @@ def boolnot(f):
     return wrapper
 
 
-class setprop(property):
+class setter(property):
     """ Memoize a property such that it is computed only once """
 
     def __init__(self, fset, doc=None):
-        super(setprop, self).__init__(fget=None, fset=fset, doc=doc)
+        super(setter, self).__init__(fget=None, fset=fset, doc=doc)
 
 
 def monkeypatch(cls):
     def decorator(func):
-        setattr(cls, func.__name__, func)
+        if cls is not None:
+            try:
+                fname = func.func_name
+            except AttributeError:
+                fname = func.__func__.func_name
+            setattr(cls, fname, func)
         return func
     return decorator
