@@ -7,7 +7,7 @@ import pytk.postit
 import pytk.nptk as nptk
 import pytk.pack as pack
 import pytk.itt as itt
-from pytk.decorators import setprop
+from pytk.decorators import setter
 
 from autograd import jacobian, hessian
 

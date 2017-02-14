@@ -37,7 +37,7 @@ class Foo(object):
     def f_getter(self):
         return self._value
 
-    @decorators.setprop
+    @decorators.setter
     def f_setter(self, value):
         self._value = value
 
