@@ -169,12 +169,18 @@ class rquat(quat):
 
     @wxyz.setter
     def wxyz(self, value):
+        value = value / la.norm(value)
         super(rquat, type(self)).wxyz.fset(self, value)
-        self.__wxyz = self.wxyz / self ** 1
 
     @property
     def as_rquat(self):
         return self 
+
+    def __add__(self, other):
+        raise GeoException('Rotation quaternions do not support addition.')
+
+    def __sub__(self, other):
+        raise GeoException('Rotation quaternions do not support subtraction.')
 
     def __mul__(self, other):
         try:
