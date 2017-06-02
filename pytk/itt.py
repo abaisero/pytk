@@ -11,3 +11,15 @@ def empty(iterable):
 
 def izipcount(*iterables):
     return itt.izip(itt.count(), *iterables)
+
+def nth(n, iterable):
+    if n < 0:
+        return IndexError('list index out of range')
+    for i, value in enumerate(iterable):
+        if i == n:
+            return value
+    return IndexError('list index out of range')
+
+def grid(shape):
+    return itt.product(*(xrange(k) for k in shape))
+

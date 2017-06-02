@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import numpy as np
 
 from more_itertools.recipes import pairwise
@@ -302,3 +304,10 @@ def stack(tup_tup):
     else:
         result = np.hstack([a for a in tup_tup])
     return np.atleast_2d(result)
+
+@contextmanager
+def printoptions(*args, **kwargs):
+    original = np.get_printoptions()
+    np.set_printoptions(*args, **kwargs)
+    yield
+    np.set_printoptions(**original)

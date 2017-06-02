@@ -20,7 +20,7 @@ class vect(object):
     def xyz(self, value):
         value = np.array(value)
         if value.shape != (3,):
-            raise GeoException('Vector needs 3 values (given {})'.format(value.shape))
+            raise GeoException('Vector needs 3 values.  Given: {}.'.format(value.shape))
         self.__xyz = value
 
     @property
