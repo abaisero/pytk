@@ -23,3 +23,5 @@ def nth(n, iterable):
 def grid(shape):
     return itt.product(*(xrange(k) for k in shape))
 
+# def this_or_that(this, that, condition):
+#     return (i if condition(i, j) else j for i, j in zip(this, that))

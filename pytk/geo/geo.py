@@ -1,5 +1,3 @@
-from __future__ import division
-
 import numpy as np
 import numpy.linalg as la
 
@@ -20,7 +18,8 @@ class vect(object):
     def xyz(self, value):
         value = np.array(value)
         if value.shape != (3,):
-            raise GeoException('Vector needs 3 values.  Given: {}.'.format(value.shape))
+            # raise GeoException(f'Vector.shape should be (3,);  is ({value.shape}).')
+            raise GeoException('Vector.shape should be (3,);  is ({}).'.format(value.shape))
         self.__xyz = value
 
     @property
@@ -41,7 +40,7 @@ class vect(object):
 
     def __sub__(self, other):
         return vect(self.xyz - other.xyz)
-    
+
     def __eq__(self, other):
         return np.allclose(self.xyz, other.xyz)
 
@@ -62,8 +61,7 @@ class quat(object):
             [ 0, -1,  0,  0],
             [ 0,  0, -1,  0],
             [ 0,  0,  0, -1],
-        ],
-        [
+        ], [
             [ 0,  1,  0,  0],
             [ 1,  0,  0,  0],
             [ 0,  0,  0,  1],
@@ -165,16 +163,18 @@ class quat(object):
 class rquat(quat):
     @property
     def wxyz(self):
-        return super(rquat, self).wxyz
+        # return super(rquat, self).wxyz
+        return super().wxyz
 
     @wxyz.setter
     def wxyz(self, value):
         value = value / la.norm(value)
-        super(rquat, type(self)).wxyz.fset(self, value)
+        # super(rquat, type(self)).wxyz.fset(self, value)
+        super().wxyz.fset(self, value)
 
     @property
     def as_rquat(self):
-        return self 
+        return self
 
     def __add__(self, other):
         raise GeoException('Rotation quaternions do not support addition.')
@@ -184,11 +184,13 @@ class rquat(quat):
 
     def __mul__(self, other):
         try:
-            return super(rquat, self).__mul__(other)
+            # return super(rquat, self).__mul__(other)
+            return super().__mul__(other)
         except AttributeError:
             xyz = (self.conj * other.as_quat * self).xyz
             return vect(xyz)
 
     def __eq__(self, other):
-        return super(rquat, self).__eq__(other) or \
-                super(rquat, self).__eq__(-other)
+        # return super(rquat, self).__eq__(other) or \
+        #         super(rquat, self).__eq__(-other)
+        return super().__eq__(other) or super().__eq__(-other)

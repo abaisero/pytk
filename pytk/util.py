@@ -19,6 +19,7 @@ class Hashable(object):
         return isinstance(self, type(other)) and self._hashable_key == other._hashable_key
 
 
+# TODO destroy this madness...
 class Keyable(object):
     """ Better version of Hashable """
     # # TODO either directly give values, or give attr names
@@ -47,6 +48,7 @@ class Keyable(object):
                 else not result)
 
 
+# TODO remove
 def trymap(f, x):
     """returns f(x) if no exception is raised. Otherwise x"""
     try:
@@ -64,22 +66,21 @@ def argmax(f, xs, all_=False, rnd_=False):
     if all_ and rnd_:
         raise ValueError('Arguments `all_` and `rnd_` can not both be true.')
 
-    fs = map(f, xs)
-
     if not all_ and not rnd_:
-        xi = np.argmax(fs)
-        return xs[xi]
+        return max(xs, key=f)
 
     fmax = None
-    for x, f in zip(xs, fs):
-        if fmax is None or f > fmax:
-            xmaxs, fmax = [], f
-        if fmax == f:
+    for x in xs:
+        fx = f(x)
+        if fmax is None or fx > fmax:
+            xmaxs, fmax = [], fx
+        if fmax == fx:
             xmaxs.append(x)
 
     if all_:
         return xmaxs
-    # if rnd_:  # has to be true
+
+    # rnd_
     xi = rnd.choice(len(xmaxs))
     return xmaxs[xi]
 
