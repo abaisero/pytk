@@ -17,7 +17,7 @@ class FactoryFilter(Factory):
 
         def __getattr__(self, name):
             try:
-                return getattr(super().__dict__['fitem'], name)
+                return getattr(super(Item, self).__dict__['fitem'], name)
             except KeyError:
                 raise AttributeError
 
@@ -58,7 +58,7 @@ class FactoryFilter(Factory):
 
     def i(self, value):
         if not self.vfilter(value):
-            raise ValueError(f'Value {value} not valid.')
+            raise ValueError('Value {} not valid.'.format(value))
         i = self.factory.i(value)
         return i - self.ltarray[i]
 
@@ -66,7 +66,7 @@ class FactoryFilter(Factory):
         try:
             fi = self.iarray[i]
         except IndexError as e:
-            re = ValueError(f'Index {i} not valid;  Must be < {self.nitems}.')
+            re = ValueError('Index {} not valid;  Must be < {}.'.format(i, self.nitems))
             raise re.with_traceback(e.__traceback__)
         else:
             return self.factory.value(fi)

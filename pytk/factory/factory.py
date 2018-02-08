@@ -5,8 +5,8 @@ class FactoryException(Exception):
     pass
 
 
-class Factory:
-    class Item:
+class Factory(object):
+    class Item(object):
         def __init__(self, factory, i):
             self.factory = factory
             self.i = i

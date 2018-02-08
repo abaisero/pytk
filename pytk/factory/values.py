@@ -4,7 +4,7 @@ from .factory import Factory
 # TODO change to FactoryValues
 class FactoryValues(Factory):
     def __init__(self, values):
-        super().__init__()
+        super(FactoryValues, self).__init__()
         self.values = values
         self.nitems = len(values)
 
@@ -12,7 +12,7 @@ class FactoryValues(Factory):
         try:
             return self.values.index(value)
         except ValueError as e:
-            re = ValueError(f'Value {value} not valid.')
+            re = ValueError('Value {} not valid.'.format(value))
             raise re.with_traceback(e.__traceback__)
 
     def value(self, i):
@@ -21,9 +21,9 @@ class FactoryValues(Factory):
 
 class FactoryBool(FactoryValues):
     def __init__(self):
-        super().__init__((False, True))
+        super(FactoryBool, self).__init__((False, True))
 
 
 class FactoryN(FactoryValues):
     def __init__(self, n):
-        super().__init__(list(range(n)))
+        super(FactoryN, self).__init__(list(range(n)))

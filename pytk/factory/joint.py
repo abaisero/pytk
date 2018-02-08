@@ -23,7 +23,7 @@ class FactoryJoint(Factory):
 
         def __getattr__(self, name):
             try:
-                return super().__dict__['imap'][name]
+                return super(FactoryJoint.Item, self).__dict__['imap'][name]
             except KeyError:
                 raise AttributeError
 
