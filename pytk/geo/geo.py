@@ -29,8 +29,9 @@ class vect(object):
     def __pow__(self, p):
         return np.dot(self.xyz, self.xyz) ** (p / 2)
 
-    def __len__(self):
-        return self ** 1
+    # DON'T USE LEN TO REPRESENT NORM!!!
+    # def __len__(self):
+    #     return self ** 1
 
     def __neg__(self):
         return vect(-self.xyz)

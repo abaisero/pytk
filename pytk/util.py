@@ -48,13 +48,13 @@ class Keyable(object):
                 else not result)
 
 
-# TODO remove
-def trymap(f, x):
-    """returns f(x) if no exception is raised. Otherwise x"""
-    try:
-        return f(x)
-    except:
-        return x
+# # TODO remove (horrible idea)
+# def trymap(f, x):
+#     """returns f(x) if no exception is raised. Otherwise x"""
+#     try:
+#         return f(x)
+#     except:
+#         return x
 
 
 def compose(*funcs):
@@ -62,7 +62,7 @@ def compose(*funcs):
     return lambda x: reduce(lambda v, f: f(v), reversed(funcs), x)
 
 
-def argmax(f, xs, all_=False, rnd_=False):
+def argmax(f, xs, *, all_=False, rnd_=False):
     if all_ and rnd_:
         raise ValueError('Arguments `all_` and `rnd_` can not both be true.')
 

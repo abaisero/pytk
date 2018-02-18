@@ -32,8 +32,7 @@ class Factory:
             return not self == other
 
         def __hash__(self):
-            # TODO probably better way?
-            return id(self.factory) ^ hash(self.i)
+            return hash(self.factory) ^ hash(self.i)
 
         def __int__(self):
             return self.i
@@ -57,20 +56,16 @@ class Factory:
 
         if i is None:
             i = 0 if value is value_None else self.i(value)
-        return self.Item(self, i)
+        return self.Item(self, i)  # this might be annoying for union...
 
     def check_ivalue(self, i, value):
         return i is None or value is value_None or self.value(i) == value
 
-    # def _istr_(self, _istr_):
-    #     self.__istr__ = _istr_
-    #     return _istr_
-
-    # def istr(self, item):
-    #     try:
-    #         return self.__istr__(item)
-    #     except AttributeError:
-    #         return str(item.value)
+    def isitem(self, item):
+        try:
+            return item.factory is self and 0 <= item.i < self.nitems
+        except AttributeError:
+            return False
 
     @property
     def items(self):

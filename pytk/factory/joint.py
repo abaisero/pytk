@@ -6,6 +6,7 @@ import numpy as np
 
 class FactoryJoint(Factory):
     class Item(Factory.Item):
+        # JointItem does not contain an explicit index;  it uses the indices of the children items!
         @property
         def i(self):
             indices = tuple(s.i for s in self.imap.values())
@@ -21,18 +22,31 @@ class FactoryJoint(Factory):
             except AttributeError:
                 self.imap = self.factory.imap(ii)
 
+        # TODO overwrite __eq__ such that it looks for attributes / __getitem__
+
         def __getattr__(self, name):
             try:
                 return super().__dict__['imap'][name]
             except KeyError:
                 raise AttributeError
 
+        # TODO when setting smth which is a subitem;  actually set a value!!
+        # TODO to avoid item.p = value (instead of item.p.value = ...) bug
+        # def __setattribute__(self, name, value):
+        #     # TODO if
+        #     if name in super().__dict__['imap']:
+        #         getattr(self, name).value = value
+        #     else:
+        #     try:
+        #         super().__dict__['imap'][name]
+        #     except KeyError
+
     def __init__(self, **fmap):
         self.fmap = fmap
         self.dims = tuple(sf.nitems for sf in fmap.values())
         self.nitems = np.prod(self.dims)
 
-        self.vtype = namedtuple('Value', fmap.keys())
+        self.vtype = namedtuple('VJoint', fmap.keys())
 
     def __getattr__(self, name):
         try:

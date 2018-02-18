@@ -1,7 +1,6 @@
 from .factory import Factory
 
 
-# TODO change to FactoryValues
 class FactoryValues(Factory):
     def __init__(self, values):
         super().__init__()
@@ -10,6 +9,7 @@ class FactoryValues(Factory):
 
     def i(self, value):
         try:
+            # TODO this will not scale well?
             return self.values.index(value)
         except ValueError as e:
             re = ValueError(f'Value {value} not valid.')
