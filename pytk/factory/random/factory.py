@@ -35,7 +35,7 @@ class FactoryDistribution(Distribution):
         # TODO what about terminal states?
 
     @property
-    def asarray(self):
+    def array(self):
         if self.__array is None:
             shape = tuple(f.nitems for f in self.xyfactories)
             self.__array = np.zeros(shape)
@@ -48,10 +48,40 @@ class FactoryDistribution(Distribution):
 
         return self.__array
 
+    @array.setter
+    def array(self, value):
+        assert value.shape == tuple(f.nitems for f in self.xyfactories)
+        self.__array = value
+
+    # TODO in all methods, use array if exists...
+    # TODO for dist and pr methods;  give a* interface
+
+    # TODO use array if exists...
+
+    def adist(self, *x):
+        logger.debug(f'adist() \t; x={x}')
+        assert len(x) == self.nx
+
+        shape = tuple(f.nitems for f in self.yfactories)
+        adist = np.zeros(shape)
+        for yp in self.dist(*x):
+            y, p = yp[:-1], yp[-1]
+            yi = tuple(item.i for item in y)
+            adist[yi] += p
+
+        return adist
+
+    # TODO probably better wait..
     @nevernest(n=1)
     def dist(self, *x):
         logger.debug(f'dist() \t; x={x}')
         assert len(x) == self.nx
+
+        if self.__array is not None:
+            for y in itt.product(*self.yfactories):
+                idx = tuple(item.i for item in (x+y))
+                yield (*y, self.array[idx])
+            return
 
         try:
             dist = ((*y, self.pr(*x, *y)) for y in itt.product(*self.yfactories))

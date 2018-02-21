@@ -21,7 +21,7 @@ class RealDistribution(Distribution):
         self.__array = None
 
     @property
-    def asarray(self):
+    def array(self):
         if self.__array is None:
             shape = tuple(f.nitems for f in self.xfactories)
             self.__array = np.zeros(shape)
@@ -31,13 +31,25 @@ class RealDistribution(Distribution):
 
         return self.__array
 
+    @array.setter
+    def array(self, value):
+        assert value.shape == tuple(f.nitems for f in self.xfactories)
+        self.__array = value
+
+    # TODO probably better wait..
     @nevernest(n=1)
     def dist(self, *x):
         logger.debug(f'dist() \t; x={x}')
         assert len(x) == self.nx
 
+        if self.__array is not None:
+            idx = tuple(item.i for item in x)
+            yield self.array[idx], 1.
+            return
+
         raise NotImplementedError('Method self.dist() of this distribution was neither supplied nor can it be computed automagically.')
 
+    # TODO probably better wait..
     @nevernest(n=1)
     def sample(self, *x):
         logger.debug(f'sample() \t; x={x}')
