@@ -61,6 +61,7 @@ class FactoryDistribution(Distribution):
 
         return dist
 
+    # TODO probably better wait..
     @nevernest(n=1)
     def pr(self, *xy):
         logger.debug(f'pr() \t; xy={xy}')
@@ -74,6 +75,7 @@ class FactoryDistribution(Distribution):
 
         return pr
 
+    # TODO probably better wait..
     @nevernest(n=1)
     def sample(self, *x):
         logger.debug(f'sample() \t; x={x}')
@@ -83,7 +85,8 @@ class FactoryDistribution(Distribution):
             dist = list(self.dist(*x))
             ys = [yp[:-1] for yp in dist]
             ps = [yp[-1] for yp in dist]
-            yi = rnd.choice(len(ys), p=ps)
+            yi = rnd.multinomial(1, ps).argmax()
+            # yi = rnd.choice(len(ys), p=ps)
             y = ys[yi]
         except NestingError as e:
             raise NotImplementedError('Method self.sample() of this distribution was neither supplied nor can it be computed automagically.') from e

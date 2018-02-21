@@ -47,12 +47,15 @@ class RealDistribution(Distribution):
             dist = list(self.dist(*x))
             rs = [r for r, _ in dist]
             ps = [p for _, p in dist]
-            r = rnd.choice(rs, p=ps)
+            ri = rnd.multinomial(1, ps).argmax()
+            r = rs[ri]
+            # r = rnd.choice(rs, p=ps)
         except NestingError as e:
             raise NotImplementedError('Method self.sample() of this distribution was neither supplied nor can it be computed automagically.') from e
 
         return r
 
+    # TODO probably better wait..
     @nevernest(n=1)
     def E(self, *x):
         logger.debug(f'E() \t; x={x}')
