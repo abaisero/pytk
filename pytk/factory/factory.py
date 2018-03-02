@@ -40,8 +40,8 @@ class Factory:
         def __str__(self):
             return self.factory.istr(self)
 
-        # def __repr__(self):
-        #     return self.factory.istr(self)
+        def __repr__(self):
+            return f'Item({self.factory.istr(self)})'
 
     @staticmethod
     def istr(item):

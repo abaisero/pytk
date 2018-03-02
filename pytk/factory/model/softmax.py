@@ -74,7 +74,7 @@ class Softmax(Model):
 
     def probs(self, *items):
         logprobs = self.logprobs(*items)
-        probs = np.exp(logprobs)
+        probs = np.exp(logprobs - logprobs.max())
         # TODO future bug! only normalize the y axes which were not given!!
         return probs / probs.sum()
 
