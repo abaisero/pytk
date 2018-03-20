@@ -2,7 +2,6 @@ import collections
 # import operator
 
 import numpy as np
-import numpy.random as rnd
 
 
 # NOTE deprecated.  Use Keyable instead
@@ -48,41 +47,11 @@ class Keyable(object):
                 else not result)
 
 
-# # TODO remove (horrible idea)
-# def trymap(f, x):
-#     """returns f(x) if no exception is raised. Otherwise x"""
-#     try:
-#         return f(x)
-#     except:
-#         return x
-
-
 def compose(*funcs):
     """ Composes input functions f(.), g(.), and h(.) into f(g(h(.))) """
     return lambda x: reduce(lambda v, f: f(v), reversed(funcs), x)
 
 
-def argmax(f, xs, *, all_=False, rnd_=False):
-    if all_ and rnd_:
-        raise ValueError('Arguments `all_` and `rnd_` can not both be true.')
-
-    if not all_ and not rnd_:
-        return max(xs, key=f)
-
-    fmax = None
-    for x in xs:
-        fx = f(x)
-        if fmax is None or fx > fmax:
-            xmaxs, fmax = [], fx
-        if fmax == fx:
-            xmaxs.append(x)
-
-    if all_:
-        return xmaxs
-
-    # rnd_
-    xi = rnd.choice(len(xmaxs))
-    return xmaxs[xi]
 
 
 class true_every(object):

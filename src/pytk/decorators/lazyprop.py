@@ -28,7 +28,7 @@ class lazyprop(property):
         return type(self)(fget, self.__doc__)
 
     def setter(self, fset):
-        raise AttributeError('lazyprop is read-only and does not allow to set explicit setter.')
+        raise AttributeError('lazyprop is read-only, and does not support having a setter.')
 
     def deleter(self, fdel):
-        raise AttributeError('lazyprop is read-only and does not allow to set explicit deleter.')
+        raise AttributeError('lazyprop is read-only, and does not support having a deleter.')

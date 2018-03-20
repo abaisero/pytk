@@ -6,7 +6,7 @@ class GeoException(Exception):
     pass
 
 
-class vect(object):
+class vect:
     def __init__(self, xyz):
         self.xyz = xyz
 
@@ -55,7 +55,7 @@ class vect(object):
         return 'vect({})'.format(str(self.xyz))
 
 
-class quat(object):
+class quat:
     __mulmat__ = np.array([
         [
             [ 1,  0,  0,  0],

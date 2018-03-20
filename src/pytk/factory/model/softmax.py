@@ -31,8 +31,10 @@ class Softmax(Model):
         self.reset()
 
     def reset(self):
-        self.params = np.zeros(self.shape)
-        # self.params = rnd.normal(size=self.shape)
+        # self.params = np.zeros(self.shape)
+        self.params = rnd.normal(size=self.shape)
+        # self.params = 2 * rnd.normal(size=self.shape)
+        # self.params = 3 * (.5 - rnd.random_sample(self.shape))
 
     @staticmethod
     def index(item, *, keepdims=False):
@@ -76,10 +78,12 @@ class Softmax(Model):
         logprobs = self.logprobs(*items)
         probs = np.exp(logprobs - logprobs.max())
         # TODO future bug! only normalize the y axes which were not given!!
+        # TODO bug already happening...
+        # TODO BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG BUG
         return probs / probs.sum()
 
-    # all the next methods assume that all items are given!!
-    # generalize! this will simplify logprob!
+        # all the next methods assume that all items are given!!
+        # generalize! this will simplify logprob!
 
 
     def phi(self, *items):
@@ -118,10 +122,11 @@ class Softmax(Model):
         dlogprobs = dprefs[yidx] - np.tensordot(probs, dprefs, axes=self.ny)
         return dlogprobs
 
-    # TODO I don't know if I need this... if I do, it's not hard to implement
-    # def dprobs(self, *items):
-    #     probs = self.probs(*items))
-    #     dlogprobs = self.dlogprobs(*items)
+    # TODO better interface;  *items is not great...
+    def dprobs(self, *items):
+        probs = self.probs(*items))
+        dlogprobs = self.dlogprobs(*items)
+        # TODO just multiply these...
 
     # def ddprefs(self, *items):
     #     idx = self.indices(*items)
